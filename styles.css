@@ -180,6 +180,43 @@ h1, h2, h3, h4 {
     font-size: 1.1rem;
 }
 
+/* Login Button */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: var(--accent-gold);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: var(--transition-normal);
+    cursor: pointer;
+}
+
+.btn-login svg {
+    transition: var(--transition-fast);
+}
+
+.btn-login:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--accent-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+.btn-login:hover svg {
+    transform: translateX(3px);
+}
+
 /* ==========================================================================
    Header & Navigation
    ========================================================================== */
@@ -665,8 +702,8 @@ h1, h2, h3, h4 {
         z-index: 1001;
     }
     
-    .header .btn-outline {
-        display: none; /* Hide header btn on mobile to simplify */
+    .header .header-buttons {
+        display: none; /* Hide header buttons on mobile to simplify */
     }
     
     .hero-title {

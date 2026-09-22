@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Luminárias | Lugh Lighting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../calculadora.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="header-brand">
+        <img src="../assets/logo.png" alt="Lugh Lighting" class="header-logo">
+        <span class="header-title">LUGH LIGHTING</span>
+      </a>
+      <div class="header-user">
+        <img id="userAvatar" src="" alt="Avatar" class="header-avatar">
+        <span id="userName" class="header-username"></span>
+        <button class="btn-sair" onclick="logout()">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1 class="page-title">Calculadora de <span class="gold">Luminárias</span></h1>
+      <p class="page-subtitle">Monte seu orçamento de iluminação</p>
+    </div>
+
+    <!-- Calculator Form Card -->
+    <section class="card form-card">
+      <h2 class="card-title">Adicionar Item</h2>
+      <form id="calculatorForm" onsubmit="return false;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="tipoLuminaria">Tipo de Luminária</label>
+            <select id="tipoLuminaria" required>
+              <option value="">Selecione o tipo...</option>
+              <option value="Embutida">Embutida</option>
+              <option value="Sobrepor">Sobrepor</option>
+              <option value="Pendente">Pendente</option>
+              <option value="Trilho/Spot">Trilho/Spot</option>
+              <option value="Fita LED">Fita LED</option>
+              <option value="Arandela">Arandela</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="modeloLuminaria">Modelo</label>
+            <select id="modeloLuminaria" required disabled>
+              <option value="">Selecione o modelo...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quantidade">Quantidade</label>
+            <input type="number" id="quantidade" min="1" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="precoUnitario">Preço Unitário (R$)</label>
+            <input type="text" id="precoUnitario" readonly placeholder="—">
+          </div>
+        </div>
+        <button type="button" class="btn-primary" onclick="adicionarItem()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar ao Orçamento
+        </button>
+      </form>
+    </section>
+
+    <!-- Budget Table -->
+    <section class="card table-card">
+      <h2 class="card-title">Itens do Orçamento</h2>
+      <div class="table-wrapper">
+        <table class="budget-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Tipo</th>
+              <th>Modelo</th>
+              <th>Qtd</th>
+              <th>Preço Unit.</th>
+              <th>Subtotal</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaItens">
+            <tr class="empty-state-row">
+              <td colspan="7" class="empty-state">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3;margin-bottom:8px"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
+                <span>Nenhum item adicionado ao orçamento</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Summary Section -->
+    <section class="card summary-card">
+      <h2 class="card-title">Resumo do Orçamento</h2>
+      <div class="summary-grid">
+        <div class="form-group summary-area">
+          <label for="areaAmbiente">Área do ambiente (m²) <span class="optional">— opcional</span></label>
+          <input type="number" id="areaAmbiente" min="0" step="0.01" placeholder="Ex: 25.5" oninput="calcularCustoPorM2()">
+        </div>
+        <div class="summary-values">
+          <div class="summary-row total-row">
+            <span class="summary-label">Total do Orçamento</span>
+            <span id="totalOrcamento" class="summary-total">R$ 0,00</span>
+          </div>
+          <div class="summary-row custo-m2-row" id="custoM2Row" style="display:none;">
+            <span class="summary-label">Custo por m²</span>
+            <span id="custoM2" class="summary-custo-m2">R$ 0,00</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <div class="actions-bar">
+      <button class="btn-outline" onclick="limparOrcamento()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Limpar Orçamento
+      </button>
+      <button class="btn-primary" onclick="imprimirOrcamento()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir Orçamento
+      </button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Lugh Lighting. Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="../auth.js"></script>
+  <script src="../calculadora.js"></script>
+</body>
+</html>

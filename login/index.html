@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Lugh Lighting</title>
+
+  <!-- Outfit font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async></script>
+
+  <!-- Shared auth module -->
+  <script src="../auth.js"></script>
+
+  <style>
+    /* ── Reset & Base ──────────────────────────────────── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #181816;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ── Radial glow behind the card ───────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 700px;
+      height: 700px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(
+        circle,
+        rgba(212, 175, 55, 0.08) 0%,
+        rgba(212, 175, 55, 0.03) 40%,
+        transparent 70%
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Login Card ────────────────────────────────────── */
+    .login-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(30, 30, 27, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ── Logo ──────────────────────────────────────────── */
+    .login-card .logo {
+      width: 160px;
+      margin-bottom: 32px;
+    }
+
+    /* ── Typography ────────────────────────────────────── */
+    .login-card h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #d4af37;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .login-card .subtitle {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: #a0a0a0;
+      margin-bottom: 36px;
+      line-height: 1.5;
+    }
+
+    /* ── Google button wrapper ─────────────────────────── */
+    #g_id_signin {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    /* ── Back link ─────────────────────────────────────── */
+    .back-link {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: #d4af37;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-card">
+    <img src="../assets/logo.png" alt="Lugh Lighting" class="logo">
+
+    <h1>Área Restrita</h1>
+    <p class="subtitle">Faça login para acessar a calculadora de luminárias</p>
+
+    <div id="g_id_signin"></div>
+
+    <a href="/" class="back-link">← Voltar ao site</a>
+  </div>
+
+  <script>
+    // If already authenticated, skip straight to the app
+    if (checkAuth()) {
+      window.location.href = '/principal/';
+    }
+
+    // Initialize Google Sign-In once the GIS library is available
+    function initGoogleSignIn() {
+      google.accounts.id.initialize({
+        client_id: '313230016841-bte9olt0p0uuelk3m34p3h8uoku0e811.apps.googleusercontent.com',
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById('g_id_signin'),
+        { theme: 'filled_black', size: 'large', width: 300, text: 'signin_with', locale: 'pt-BR' }
+      );
+    }
+
+    // Wait for the async Google script to finish loading
+    function waitForGoogle() {
+      if (window.google && window.google.accounts) {
+        initGoogleSignIn();
+      } else {
+        setTimeout(waitForGoogle, 100);
+      }
+    }
+
+    waitForGoogle();
+  </script>
+</body>
+</html>
