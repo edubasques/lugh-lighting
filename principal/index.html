@@ -30,12 +30,41 @@
   <main class="main-content">
     <div class="page-header">
       <h1 class="page-title">Calculadora de <span class="gold">Luminárias</span></h1>
-      <p class="page-subtitle">Monte seu orçamento de iluminação</p>
+      <p class="page-subtitle">Monte seu orçamento completo de iluminação</p>
     </div>
+
+    <!-- Parâmetros do Orçamento -->
+    <section class="card params-card">
+      <h2 class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Parâmetros do Orçamento
+      </h2>
+      <div class="form-grid form-grid-3">
+        <div class="form-group">
+          <label for="margemLucro">Margem de Lucro (%)</label>
+          <input type="number" id="margemLucro" min="0" max="100" step="0.5" value="30" oninput="recalcularTudo()">
+        </div>
+        <div class="form-group">
+          <label for="custoRT">Custo RT Arquiteto (R$)</label>
+          <input type="number" id="custoRT" min="0" step="0.01" value="0" placeholder="Ex: 500.00" oninput="recalcularTudo()">
+        </div>
+        <div class="form-group">
+          <label for="custoFrete">Frete (R$)</label>
+          <input type="number" id="custoFrete" min="0" step="0.01" value="0" placeholder="Ex: 350.00" oninput="recalcularTudo()">
+        </div>
+      </div>
+      <div class="params-info">
+        <span class="info-badge">SP → MG</span>
+        <span class="info-text">ICMS Interestadual 12% · ICMS MG 18% · DIFAL 6% · PIS 1,65% · COFINS 7,6%</span>
+      </div>
+    </section>
 
     <!-- Calculator Form Card -->
     <section class="card form-card">
-      <h2 class="card-title">Adicionar Item</h2>
+      <h2 class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Adicionar Item
+      </h2>
       <form id="calculatorForm" onsubmit="return false;">
         <div class="form-grid">
           <div class="form-group">
@@ -61,7 +90,7 @@
             <input type="number" id="quantidade" min="1" value="1" required>
           </div>
           <div class="form-group">
-            <label for="precoUnitario">Preço Unitário (R$)</label>
+            <label for="precoUnitario">Preço NF Fornecedor (R$)</label>
             <input type="text" id="precoUnitario" readonly placeholder="—">
           </div>
         </div>
@@ -74,18 +103,21 @@
 
     <!-- Budget Table -->
     <section class="card table-card">
-      <h2 class="card-title">Itens do Orçamento</h2>
+      <h2 class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
+        Itens do Orçamento
+      </h2>
       <div class="table-wrapper">
         <table class="budget-table">
           <thead>
             <tr>
-              <th>Item</th>
+              <th>#</th>
               <th>Tipo</th>
               <th>Modelo</th>
               <th>Qtd</th>
-              <th>Preço Unit.</th>
+              <th>Preço NF</th>
               <th>Subtotal</th>
-              <th>Ações</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="tabelaItens">
@@ -100,18 +132,70 @@
       </div>
     </section>
 
-    <!-- Summary Section -->
+    <!-- Resumo Financeiro Completo -->
     <section class="card summary-card">
-      <h2 class="card-title">Resumo do Orçamento</h2>
+      <h2 class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Resumo Financeiro
+      </h2>
+
       <div class="summary-grid">
+        <!-- Coluna esquerda: Área -->
         <div class="form-group summary-area">
           <label for="areaAmbiente">Área do ambiente (m²) <span class="optional">— opcional</span></label>
-          <input type="number" id="areaAmbiente" min="0" step="0.01" placeholder="Ex: 25.5" oninput="calcularCustoPorM2()">
+          <input type="number" id="areaAmbiente" min="0" step="0.01" placeholder="Ex: 25.5" oninput="recalcularTudo()">
         </div>
-        <div class="summary-values">
+
+        <!-- Coluna direita: Breakdown -->
+        <div class="summary-breakdown">
+          <!-- Produtos -->
+          <div class="summary-row">
+            <span class="summary-label">Subtotal Produtos</span>
+            <span id="subtotalProdutos" class="summary-value">R$ 0,00</span>
+          </div>
+
+          <!-- Impostos -->
+          <div class="summary-section-title">Impostos (SP → MG)</div>
+          <div class="summary-row sub-row">
+            <span class="summary-label">DIFAL (6%)</span>
+            <span id="valorDifal" class="summary-value">R$ 0,00</span>
+          </div>
+          <div class="summary-row sub-row">
+            <span class="summary-label">IPI</span>
+            <span id="valorIpi" class="summary-value">R$ 0,00</span>
+          </div>
+          <div class="summary-row sub-row">
+            <span class="summary-label">PIS (1,65%)</span>
+            <span id="valorPis" class="summary-value">R$ 0,00</span>
+          </div>
+          <div class="summary-row sub-row">
+            <span class="summary-label">COFINS (7,6%)</span>
+            <span id="valorCofins" class="summary-value">R$ 0,00</span>
+          </div>
+          <div class="summary-row highlight-row">
+            <span class="summary-label">Total com Impostos</span>
+            <span id="totalComImpostos" class="summary-value">R$ 0,00</span>
+          </div>
+
+          <!-- Margem e custos -->
+          <div class="summary-section-title">Custos Adicionais</div>
+          <div class="summary-row sub-row">
+            <span class="summary-label">Margem de Lucro (<span id="margemLabel">30</span>%)</span>
+            <span id="valorMargem" class="summary-value">R$ 0,00</span>
+          </div>
+          <div class="summary-row sub-row">
+            <span class="summary-label">RT Arquiteto</span>
+            <span id="valorRT" class="summary-value">R$ 0,00</span>
+          </div>
+          <div class="summary-row sub-row">
+            <span class="summary-label">Frete</span>
+            <span id="valorFrete" class="summary-value">R$ 0,00</span>
+          </div>
+
+          <!-- Total Final -->
           <div class="summary-row total-row">
-            <span class="summary-label">Total do Orçamento</span>
-            <span id="totalOrcamento" class="summary-total">R$ 0,00</span>
+            <span class="summary-label">TOTAL FINAL</span>
+            <span id="totalFinal" class="summary-total">R$ 0,00</span>
           </div>
           <div class="summary-row custo-m2-row" id="custoM2Row" style="display:none;">
             <span class="summary-label">Custo por m²</span>

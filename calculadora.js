@@ -2,51 +2,52 @@
    Lugh Lighting — Calculadora de Luminárias
    ======================================== */
 
+// ---- Alíquotas de Impostos (SP → MG) ----
+const IMPOSTOS = {
+  ICMS_INTERESTADUAL: 0.12,  // 12% já incluso no preço NF do fornecedor SP
+  ICMS_INTERNO_MG: 0.18,     // 18% alíquota interna MG
+  DIFAL: 0.06,               // 18% - 12% = 6%
+  PIS: 0.0165,               // 1,65%
+  COFINS: 0.076,             // 7,6%
+  IPI: 0.05,                 // 5% padrão (varia por NCM, pode ser ajustado por produto)
+};
+
 // ---- Product Catalog ----
+// Preços = preço NF do fornecedor (com ICMS-SP incluso)
+// ipi = alíquota IPI específica do produto (se diferente do padrão)
 const CATALOGO = {
   'Embutida': [
-    { modelo: 'Embutida Quadrada 12W', preco: 89.90 },
-    { modelo: 'Embutida Redonda 18W', preco: 119.90 },
-    { modelo: 'Embutida Quadrada 24W', preco: 149.90 },
+    { modelo: 'Embutida Quadrada 12W', preco: 89.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Embutida Redonda 18W', preco: 119.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Embutida Quadrada 24W', preco: 149.90, ncm: '9405.10.99', ipi: 0.05 },
   ],
   'Sobrepor': [
-    { modelo: 'Plafon Sobrepor 20W', preco: 129.90 },
-    { modelo: 'Plafon Sobrepor 30W', preco: 179.90 },
+    { modelo: 'Plafon Sobrepor 20W', preco: 129.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Plafon Sobrepor 30W', preco: 179.90, ncm: '9405.10.99', ipi: 0.05 },
   ],
   'Pendente': [
-    { modelo: 'Pendente Cilíndrico', preco: 259.90 },
-    { modelo: 'Pendente Industrial', preco: 349.90 },
-    { modelo: 'Pendente Decorativo', preco: 449.90 },
+    { modelo: 'Pendente Cilíndrico', preco: 259.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Pendente Industrial', preco: 349.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Pendente Decorativo', preco: 449.90, ncm: '9405.10.99', ipi: 0.05 },
   ],
   'Trilho/Spot': [
-    { modelo: 'Spot Trilho 7W', preco: 79.90 },
-    { modelo: 'Spot Trilho 12W', preco: 109.90 },
-    { modelo: 'Trilho 1m + 3 Spots', preco: 389.90 },
+    { modelo: 'Spot Trilho 7W', preco: 79.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Spot Trilho 12W', preco: 109.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Trilho 1m + 3 Spots', preco: 389.90, ncm: '9405.10.99', ipi: 0.05 },
   ],
   'Fita LED': [
-    { modelo: 'Fita LED 5m 4000K', preco: 89.90 },
-    { modelo: 'Fita LED 5m RGB', preco: 139.90 },
-    { modelo: 'Fita LED 5m Profissional', preco: 199.90 },
+    { modelo: 'Fita LED 5m 4000K', preco: 89.90, ncm: '9405.40.90', ipi: 0.05 },
+    { modelo: 'Fita LED 5m RGB', preco: 139.90, ncm: '9405.40.90', ipi: 0.05 },
+    { modelo: 'Fita LED 5m Profissional', preco: 199.90, ncm: '9405.40.90', ipi: 0.05 },
   ],
   'Arandela': [
-    { modelo: 'Arandela Efeito 6W', preco: 99.90 },
-    { modelo: 'Arandela Facho Duplo 12W', preco: 159.90 },
+    { modelo: 'Arandela Efeito 6W', preco: 99.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Arandela Facho Duplo 12W', preco: 159.90, ncm: '9405.10.99', ipi: 0.05 },
   ],
 };
 
 // ---- State ----
 let itensOrcamento = [];
-
-// ---- DOM References ----
-const tipoSelect = document.getElementById('tipoLuminaria');
-const modeloSelect = document.getElementById('modeloLuminaria');
-const quantidadeInput = document.getElementById('quantidade');
-const precoInput = document.getElementById('precoUnitario');
-const tabelaBody = document.getElementById('tabelaItens');
-const totalEl = document.getElementById('totalOrcamento');
-const custoM2El = document.getElementById('custoM2');
-const custoM2Row = document.getElementById('custoM2Row');
-const areaInput = document.getElementById('areaAmbiente');
 
 // ---- Formatting ----
 function formatBRL(valor) {
@@ -55,7 +56,11 @@ function formatBRL(valor) {
 
 // ---- Update Models Dropdown ----
 function atualizarModelos() {
+  const tipoSelect = document.getElementById('tipoLuminaria');
+  const modeloSelect = document.getElementById('modeloLuminaria');
+  const precoInput = document.getElementById('precoUnitario');
   const tipo = tipoSelect.value;
+
   modeloSelect.innerHTML = '<option value="">Selecione o modelo...</option>';
   precoInput.value = '';
 
@@ -74,8 +79,9 @@ function atualizarModelos() {
 
 // ---- Update Price ----
 function atualizarPreco() {
-  const tipo = tipoSelect.value;
-  const modelo = modeloSelect.value;
+  const tipo = document.getElementById('tipoLuminaria').value;
+  const modelo = document.getElementById('modeloLuminaria').value;
+  const precoInput = document.getElementById('precoUnitario');
 
   if (tipo && modelo && CATALOGO[tipo]) {
     const produto = CATALOGO[tipo].find((p) => p.modelo === modelo);
@@ -87,47 +93,38 @@ function atualizarPreco() {
   precoInput.value = '';
 }
 
-// ---- Get Selected Product Price ----
-function getPrecoSelecionado() {
-  const tipo = tipoSelect.value;
-  const modelo = modeloSelect.value;
+// ---- Get Selected Product ----
+function getProdutoSelecionado() {
+  const tipo = document.getElementById('tipoLuminaria').value;
+  const modelo = document.getElementById('modeloLuminaria').value;
   if (tipo && modelo && CATALOGO[tipo]) {
-    const produto = CATALOGO[tipo].find((p) => p.modelo === modelo);
-    return produto ? produto.preco : null;
+    return CATALOGO[tipo].find((p) => p.modelo === modelo) || null;
   }
   return null;
 }
 
 // ---- Add Item ----
 function adicionarItem() {
-  const tipo = tipoSelect.value;
-  const modelo = modeloSelect.value;
-  const quantidade = parseInt(quantidadeInput.value, 10);
-  const preco = getPrecoSelecionado();
+  const tipoSelect = document.getElementById('tipoLuminaria');
+  const modeloSelect = document.getElementById('modeloLuminaria');
+  const quantidadeInput = document.getElementById('quantidade');
 
-  // Validation
-  if (!tipo) {
-    tipoSelect.focus();
-    return;
-  }
-  if (!modelo) {
-    modeloSelect.focus();
-    return;
-  }
-  if (!quantidade || quantidade < 1) {
-    quantidadeInput.focus();
-    return;
-  }
-  if (preco === null) {
-    return;
-  }
+  const tipo = tipoSelect.value;
+  const produto = getProdutoSelecionado();
+  const quantidade = parseInt(quantidadeInput.value, 10);
+
+  if (!tipo) { tipoSelect.focus(); return; }
+  if (!produto) { modeloSelect.focus(); return; }
+  if (!quantidade || quantidade < 1) { quantidadeInput.focus(); return; }
 
   itensOrcamento.push({
     tipo,
-    modelo,
+    modelo: produto.modelo,
+    ncm: produto.ncm,
+    ipi: produto.ipi || IMPOSTOS.IPI,
     quantidade,
-    precoUnitario: preco,
-    subtotal: preco * quantidade,
+    precoUnitario: produto.preco,
+    subtotal: produto.preco * quantidade,
   });
 
   // Reset form
@@ -135,24 +132,24 @@ function adicionarItem() {
   modeloSelect.innerHTML = '<option value="">Selecione o modelo...</option>';
   modeloSelect.disabled = true;
   quantidadeInput.value = 1;
-  precoInput.value = '';
+  document.getElementById('precoUnitario').value = '';
   tipoSelect.focus();
 
   renderizarTabela();
-  calcularTotal();
-  calcularCustoPorM2();
+  recalcularTudo();
 }
 
 // ---- Remove Item ----
 function removerItem(index) {
   itensOrcamento.splice(index, 1);
   renderizarTabela();
-  calcularTotal();
-  calcularCustoPorM2();
+  recalcularTudo();
 }
 
 // ---- Render Table ----
 function renderizarTabela() {
+  const tabelaBody = document.getElementById('tabelaItens');
+
   if (itensOrcamento.length === 0) {
     tabelaBody.innerHTML = `
       <tr class="empty-state-row">
@@ -178,24 +175,62 @@ function renderizarTabela() {
     .join('');
 }
 
-// ---- Calculate Total ----
-function calcularTotal() {
-  const total = itensOrcamento.reduce((acc, item) => acc + item.subtotal, 0);
-  totalEl.textContent = formatBRL(total);
-  return total;
-}
+// ---- Recalculate Everything ----
+function recalcularTudo() {
+  const margem = parseFloat(document.getElementById('margemLucro').value) || 0;
+  const custoRT = parseFloat(document.getElementById('custoRT').value) || 0;
+  const custoFrete = parseFloat(document.getElementById('custoFrete').value) || 0;
+  const area = parseFloat(document.getElementById('areaAmbiente').value) || 0;
 
-// ---- Calculate Cost per m² ----
-function calcularCustoPorM2() {
-  const area = parseFloat(areaInput.value);
-  const total = itensOrcamento.reduce((acc, item) => acc + item.subtotal, 0);
+  // Subtotal dos produtos (preço NF fornecedor)
+  const subtotalProdutos = itensOrcamento.reduce((acc, item) => acc + item.subtotal, 0);
 
-  if (area > 0 && total > 0) {
+  // Calcular IPI por item (cada produto pode ter alíquota diferente)
+  const totalIPI = itensOrcamento.reduce((acc, item) => {
+    return acc + (item.subtotal * (item.ipi || IMPOSTOS.IPI));
+  }, 0);
+
+  // Base para os demais impostos
+  const baseTributavel = subtotalProdutos;
+
+  // DIFAL = (ICMS_MG - ICMS_INTERESTADUAL) sobre o preço
+  const valorDifal = baseTributavel * IMPOSTOS.DIFAL;
+
+  // PIS e COFINS sobre o faturamento (preço de revenda)
+  const valorPis = baseTributavel * IMPOSTOS.PIS;
+  const valorCofins = baseTributavel * IMPOSTOS.COFINS;
+
+  // Total com impostos
+  const totalComImpostos = subtotalProdutos + totalIPI + valorDifal + valorPis + valorCofins;
+
+  // Margem de lucro sobre o total com impostos
+  const valorMargem = totalComImpostos * (margem / 100);
+
+  // Total final
+  const totalFinal = totalComImpostos + valorMargem + custoRT + custoFrete;
+
+  // Atualizar UI
+  document.getElementById('subtotalProdutos').textContent = formatBRL(subtotalProdutos);
+  document.getElementById('valorDifal').textContent = formatBRL(valorDifal);
+  document.getElementById('valorIpi').textContent = formatBRL(totalIPI);
+  document.getElementById('valorPis').textContent = formatBRL(valorPis);
+  document.getElementById('valorCofins').textContent = formatBRL(valorCofins);
+  document.getElementById('totalComImpostos').textContent = formatBRL(totalComImpostos);
+
+  document.getElementById('margemLabel').textContent = margem;
+  document.getElementById('valorMargem').textContent = formatBRL(valorMargem);
+  document.getElementById('valorRT').textContent = formatBRL(custoRT);
+  document.getElementById('valorFrete').textContent = formatBRL(custoFrete);
+
+  document.getElementById('totalFinal').textContent = formatBRL(totalFinal);
+
+  // Custo por m²
+  const custoM2Row = document.getElementById('custoM2Row');
+  if (area > 0 && totalFinal > 0) {
     custoM2Row.style.display = 'flex';
-    custoM2El.textContent = formatBRL(total / area);
+    document.getElementById('custoM2').textContent = formatBRL(totalFinal / area);
   } else {
     custoM2Row.style.display = 'none';
-    custoM2El.textContent = 'R$ 0,00';
   }
 }
 
@@ -203,9 +238,8 @@ function calcularCustoPorM2() {
 function limparOrcamento() {
   itensOrcamento = [];
   renderizarTabela();
-  calcularTotal();
-  calcularCustoPorM2();
-  areaInput.value = '';
+  document.getElementById('areaAmbiente').value = '';
+  recalcularTudo();
 }
 
 // ---- Print Budget ----
@@ -222,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = '/login/';
       return;
     }
-    // Display user info
     const userNameEl = document.getElementById('userName');
     const userAvatarEl = document.getElementById('userAvatar');
     if (userNameEl && user.name) {
@@ -234,10 +267,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Event listeners
-  tipoSelect.addEventListener('change', atualizarModelos);
-  modeloSelect.addEventListener('change', atualizarPreco);
-  areaInput.addEventListener('input', calcularCustoPorM2);
+  document.getElementById('tipoLuminaria').addEventListener('change', atualizarModelos);
+  document.getElementById('modeloLuminaria').addEventListener('change', atualizarPreco);
 
-  // Focus on tipo dropdown
-  tipoSelect.focus();
+  // Initial calculation
+  recalcularTudo();
+
+  // Focus
+  document.getElementById('tipoLuminaria').focus();
 });
