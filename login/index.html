@@ -4,25 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login — Lugh Lighting</title>
-
-  <!-- Outfit font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
   <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async></script>
 
-  <!-- Shared auth module -->
+  <!-- App scripts -->
+  <script src="../firebase-config.js"></script>
   <script src="../auth.js"></script>
 
   <style>
-    /* ── Reset & Base ──────────────────────────────────── */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Outfit', sans-serif;
@@ -35,84 +33,106 @@
       overflow: hidden;
     }
 
-    /* ── Radial glow behind the card ───────────────────── */
     body::before {
       content: '';
       position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 700px;
-      height: 700px;
+      top: 50%; left: 50%;
+      width: 700px; height: 700px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(
-        circle,
-        rgba(212, 175, 55, 0.08) 0%,
-        rgba(212, 175, 55, 0.03) 40%,
-        transparent 70%
-      );
+      background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.03) 40%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* ── Login Card ────────────────────────────────────── */
     .login-card {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       background: rgba(30, 30, 27, 0.85);
       border: 1px solid rgba(212, 175, 55, 0.2);
       border-radius: 16px;
       padding: 48px 40px;
-      max-width: 420px;
-      width: 90%;
+      max-width: 440px; width: 90%;
       text-align: center;
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
-    /* ── Logo ──────────────────────────────────────────── */
-    .login-card .logo {
-      width: 160px;
-      margin-bottom: 32px;
-    }
+    .login-card .logo { width: 120px; margin-bottom: 32px; }
 
-    /* ── Typography ────────────────────────────────────── */
     .login-card h1 {
-      font-size: 1.75rem;
-      font-weight: 600;
-      color: #d4af37;
-      margin-bottom: 8px;
-      letter-spacing: 0.5px;
+      font-size: 1.75rem; font-weight: 600;
+      color: #d4af37; margin-bottom: 8px;
     }
 
     .login-card .subtitle {
-      font-size: 0.95rem;
-      font-weight: 300;
-      color: #a0a0a0;
-      margin-bottom: 36px;
-      line-height: 1.5;
+      font-size: 0.95rem; font-weight: 300;
+      color: #a0a0a0; margin-bottom: 36px; line-height: 1.5;
     }
 
-    /* ── Google button wrapper ─────────────────────────── */
-    #g_id_signin {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 32px;
-    }
+    #g_id_signin { display: flex; justify-content: center; margin-bottom: 32px; }
 
-    /* ── Back link ─────────────────────────────────────── */
     .back-link {
-      display: inline-block;
-      font-size: 0.85rem;
-      font-weight: 400;
-      color: #888;
-      text-decoration: none;
-      transition: color 0.25s ease;
+      display: inline-block; font-size: 0.85rem;
+      color: #888; text-decoration: none; transition: color 0.25s;
+    }
+    .back-link:hover { color: #d4af37; }
+
+    /* Status screens */
+    .status-screen { display: none; }
+    .status-screen.active { display: block; }
+
+    .status-icon { font-size: 3rem; margin-bottom: 16px; }
+
+    .status-title {
+      font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 12px;
     }
 
-    .back-link:hover {
-      color: #d4af37;
+    .status-text {
+      font-size: 0.95rem; color: #a0a0a0;
+      line-height: 1.6; margin-bottom: 24px;
     }
+
+    .status-pending .status-title { color: #facc15; }
+    .status-rejected .status-title { color: #ff6b6b; }
+
+    .status-user-info {
+      display: flex; align-items: center; gap: 12px;
+      justify-content: center;
+      padding: 16px; margin-bottom: 24px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+    }
+
+    .status-user-info img {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 2px solid #d4af37;
+    }
+
+    .status-user-info .user-details { text-align: left; }
+    .status-user-info .user-name { font-weight: 600; font-size: 0.95rem; }
+    .status-user-info .user-email { font-size: 0.8rem; color: #888; }
+
+    .btn-logout {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 24px; border-radius: 8px;
+      background: transparent; border: 1px solid rgba(255,255,255,0.12);
+      color: #a0a0a0; font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.25s;
+      margin-top: 8px;
+    }
+    .btn-logout:hover { border-color: #d4af37; color: #d4af37; }
+
+    #loginScreen, #loadingScreen { display: block; }
+    #loadingScreen { display: none; }
+
+    .spinner {
+      width: 32px; height: 32px; margin: 0 auto 16px;
+      border: 3px solid rgba(212,175,55,0.2);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 
@@ -120,21 +140,105 @@
   <div class="login-card">
     <img src="../assets/logo.png" alt="Lugh Lighting" class="logo">
 
-    <h1>Área Restrita</h1>
-    <p class="subtitle">Faça login para acessar a calculadora de luminárias</p>
+    <!-- Tela de Login -->
+    <div id="loginScreen" class="status-screen active">
+      <h1>Área Restrita</h1>
+      <p class="subtitle">Faça login para acessar a calculadora de luminárias</p>
+      <div id="g_id_signin"></div>
+      <a href="/" class="back-link">← Voltar ao site</a>
+    </div>
 
-    <div id="g_id_signin"></div>
+    <!-- Tela de Carregamento -->
+    <div id="loadingScreen" class="status-screen">
+      <div class="spinner"></div>
+      <p class="subtitle">Verificando acesso...</p>
+    </div>
 
-    <a href="/" class="back-link">← Voltar ao site</a>
+    <!-- Tela de Pendente -->
+    <div id="pendingScreen" class="status-screen status-pending">
+      <div class="status-icon">⏳</div>
+      <h2 class="status-title">Aguardando Aprovação</h2>
+      <div id="pendingUserInfo" class="status-user-info"></div>
+      <p class="status-text">
+        Sua solicitação de acesso foi enviada.<br>
+        Um administrador irá analisar e liberar seu cadastro em breve.
+      </p>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+      <br><br>
+      <a href="/" class="back-link">← Voltar ao site</a>
+    </div>
+
+    <!-- Tela de Rejeitado -->
+    <div id="rejectedScreen" class="status-screen status-rejected">
+      <div class="status-icon">🚫</div>
+      <h2 class="status-title">Acesso Negado</h2>
+      <div id="rejectedUserInfo" class="status-user-info"></div>
+      <p class="status-text">
+        Seu acesso à plataforma não foi aprovado.<br>
+        Entre em contato com a Lugh Lighting para mais informações.
+      </p>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+      <br><br>
+      <a href="/" class="back-link">← Voltar ao site</a>
+    </div>
   </div>
 
   <script>
-    // If already authenticated, skip straight to the app
-    if (checkAuth()) {
-      window.location.href = '/principal/';
+    // Mostrar tela de status após login
+    function mostrarStatusLogin(status, userInfo) {
+      document.querySelectorAll('.status-screen').forEach(s => s.classList.remove('active'));
+
+      if (status === 'pendente') {
+        document.getElementById('pendingScreen').classList.add('active');
+        renderUserInfo('pendingUserInfo', userInfo);
+      } else if (status === 'rejeitado') {
+        document.getElementById('rejectedScreen').classList.add('active');
+        renderUserInfo('rejectedUserInfo', userInfo);
+      }
     }
 
-    // Initialize Google Sign-In once the GIS library is available
+    function renderUserInfo(containerId, userInfo) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = `
+        <img src="${userInfo.picture || ''}" alt="Avatar">
+        <div class="user-details">
+          <div class="user-name">${userInfo.name}</div>
+          <div class="user-email">${userInfo.email}</div>
+        </div>
+      `;
+    }
+
+    // Se já logado, verificar status no Firestore
+    async function checkExistingSession() {
+      const user = checkAuth();
+      if (!user) return; // Não logado, mostrar tela de login
+
+      // Mostrar loading
+      document.querySelectorAll('.status-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('loadingScreen').classList.add('active');
+
+      try {
+        initFirebase();
+        const userData = await buscarUsuario(user.email);
+
+        if (userData && userData.status === 'aprovado') {
+          window.location.href = '/principal/';
+        } else if (userData && userData.status === 'pendente') {
+          mostrarStatusLogin('pendente', user);
+        } else if (userData && userData.status === 'rejeitado') {
+          mostrarStatusLogin('rejeitado', user);
+        } else {
+          // Usuário não encontrado no Firestore, mostrar login
+          document.querySelectorAll('.status-screen').forEach(s => s.classList.remove('active'));
+          document.getElementById('loginScreen').classList.add('active');
+        }
+      } catch (err) {
+        console.error('Error checking session:', err);
+        window.location.href = '/principal/';
+      }
+    }
+
+    // Init Google Sign-In
     function initGoogleSignIn() {
       google.accounts.id.initialize({
         client_id: '313230016841-bte9olt0p0uuelk3m34p3h8uoku0e811.apps.googleusercontent.com',
@@ -146,7 +250,6 @@
       );
     }
 
-    // Wait for the async Google script to finish loading
     function waitForGoogle() {
       if (window.google && window.google.accounts) {
         initGoogleSignIn();
@@ -155,6 +258,8 @@
       }
     }
 
+    // Inicializar
+    checkExistingSession();
     waitForGoogle();
   </script>
 </body>

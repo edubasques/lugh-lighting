@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../calculadora.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -18,6 +22,19 @@
         <img src="../assets/logo.png" alt="Lugh Lighting" class="header-logo">
         <span class="header-title">LUGH LIGHTING</span>
       </a>
+
+      <!-- Tab Navigation -->
+      <nav class="header-tabs">
+        <button class="tab-btn active" data-tab="calculadora" onclick="switchTab('calculadora')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+          Calculadora
+        </button>
+        <button class="tab-btn" data-tab="admin" id="tabAdmin" onclick="switchTab('admin')" style="display:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Administrador
+        </button>
+      </nav>
+
       <div class="header-user">
         <img id="userAvatar" src="" alt="Avatar" class="header-avatar">
         <span id="userName" class="header-username"></span>
@@ -26,8 +43,8 @@
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="main-content">
+  <!-- ========== TAB: CALCULADORA ========== -->
+  <main class="main-content tab-content active" id="tabContentCalculadora">
     <div class="page-header">
       <h1 class="page-title">Calculadora de <span class="gold">Luminárias</span></h1>
       <p class="page-subtitle">Monte seu orçamento completo de iluminação</p>
@@ -66,7 +83,7 @@
     <!-- Calculator Form Card -->
     <section class="card form-card">
       <h2 class="card-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Adicionar Item
       </h2>
       <form id="calculatorForm" onsubmit="return false;">
@@ -99,7 +116,7 @@
           </div>
         </div>
         <button type="button" class="btn-primary" onclick="adicionarItem()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Adicionar ao Orçamento
         </button>
       </form>
@@ -108,130 +125,162 @@
     <!-- Budget Table -->
     <section class="card table-card">
       <h2 class="card-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
         Itens do Orçamento
       </h2>
       <div class="table-wrapper">
         <table class="budget-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Tipo</th>
-              <th>Modelo</th>
-              <th>Qtd</th>
-              <th>Preço NF</th>
-              <th>Subtotal</th>
-              <th></th>
-            </tr>
-          </thead>
+          <thead><tr><th>#</th><th>Tipo</th><th>Modelo</th><th>Qtd</th><th>Preço NF</th><th>Subtotal</th><th></th></tr></thead>
           <tbody id="tabelaItens">
-            <tr class="empty-state-row">
-              <td colspan="7" class="empty-state">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3;margin-bottom:8px"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
-                <span>Nenhum item adicionado ao orçamento</span>
-              </td>
-            </tr>
+            <tr class="empty-state-row"><td colspan="7" class="empty-state">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.3;margin-bottom:8px"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
+              <span>Nenhum item adicionado ao orçamento</span>
+            </td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- Resumo Financeiro Completo -->
+    <!-- Resumo Financeiro -->
     <section class="card summary-card">
       <h2 class="card-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         Resumo Financeiro
       </h2>
-
       <div class="summary-grid">
-        <!-- Coluna esquerda: Área -->
         <div class="form-group summary-area">
           <label for="areaAmbiente">Área do ambiente (m²) <span class="optional">— opcional</span></label>
           <input type="number" id="areaAmbiente" min="0" step="0.01" placeholder="Ex: 25.5" oninput="recalcularTudo()">
         </div>
-
-        <!-- Coluna direita: Breakdown -->
         <div class="summary-breakdown">
-          <!-- Produtos -->
-          <div class="summary-row">
-            <span class="summary-label">Subtotal Produtos</span>
-            <span id="subtotalProdutos" class="summary-value">R$ 0,00</span>
-          </div>
-
-          <!-- Impostos -->
+          <div class="summary-row"><span class="summary-label">Subtotal Produtos</span><span id="subtotalProdutos" class="summary-value">R$ 0,00</span></div>
           <div class="summary-section-title">Impostos (SP → MG)</div>
-          <div class="summary-row sub-row">
-            <span class="summary-label">DIFAL (6%)</span>
-            <span id="valorDifal" class="summary-value">R$ 0,00</span>
-          </div>
-          <div class="summary-row sub-row">
-            <span class="summary-label">IPI</span>
-            <span id="valorIpi" class="summary-value">R$ 0,00</span>
-          </div>
-          <div class="summary-row sub-row">
-            <span class="summary-label">PIS (1,65%)</span>
-            <span id="valorPis" class="summary-value">R$ 0,00</span>
-          </div>
-          <div class="summary-row sub-row">
-            <span class="summary-label">COFINS (7,6%)</span>
-            <span id="valorCofins" class="summary-value">R$ 0,00</span>
-          </div>
-          <div class="summary-row highlight-row">
-            <span class="summary-label">Total com Impostos</span>
-            <span id="totalComImpostos" class="summary-value">R$ 0,00</span>
-          </div>
-
-          <!-- Margem e custos -->
+          <div class="summary-row sub-row"><span class="summary-label">DIFAL (6%)</span><span id="valorDifal" class="summary-value">R$ 0,00</span></div>
+          <div class="summary-row sub-row"><span class="summary-label">IPI</span><span id="valorIpi" class="summary-value">R$ 0,00</span></div>
+          <div class="summary-row sub-row"><span class="summary-label">PIS (1,65%)</span><span id="valorPis" class="summary-value">R$ 0,00</span></div>
+          <div class="summary-row sub-row"><span class="summary-label">COFINS (7,6%)</span><span id="valorCofins" class="summary-value">R$ 0,00</span></div>
+          <div class="summary-row highlight-row"><span class="summary-label">Total com Impostos</span><span id="totalComImpostos" class="summary-value">R$ 0,00</span></div>
           <div class="summary-section-title">Custos Adicionais</div>
-          <div class="summary-row sub-row">
-            <span class="summary-label">Margem de Lucro (<span id="margemLabel">30</span>%)</span>
-            <span id="valorMargem" class="summary-value">R$ 0,00</span>
-          </div>
-          <div class="summary-row sub-row">
-            <span class="summary-label">Imposto NF Revenda (<span id="impostoNFLabel">11,12</span>%)</span>
-            <span id="valorImpostoNF" class="summary-value">R$ 0,00</span>
-          </div>
-          <div class="summary-row sub-row">
-            <span class="summary-label">RT Arquiteto</span>
-            <span id="valorRT" class="summary-value">R$ 0,00</span>
-          </div>
-          <div class="summary-row sub-row">
-            <span class="summary-label">Frete</span>
-            <span id="valorFrete" class="summary-value">R$ 0,00</span>
-          </div>
-
-          <!-- Total Final -->
-          <div class="summary-row total-row">
-            <span class="summary-label">TOTAL FINAL</span>
-            <span id="totalFinal" class="summary-total">R$ 0,00</span>
-          </div>
-          <div class="summary-row custo-m2-row" id="custoM2Row" style="display:none;">
-            <span class="summary-label">Custo por m²</span>
-            <span id="custoM2" class="summary-custo-m2">R$ 0,00</span>
-          </div>
+          <div class="summary-row sub-row"><span class="summary-label">Margem de Lucro (<span id="margemLabel">30</span>%)</span><span id="valorMargem" class="summary-value">R$ 0,00</span></div>
+          <div class="summary-row sub-row"><span class="summary-label">Imposto NF Revenda (<span id="impostoNFLabel">11,12</span>%)</span><span id="valorImpostoNF" class="summary-value">R$ 0,00</span></div>
+          <div class="summary-row sub-row"><span class="summary-label">RT Arquiteto</span><span id="valorRT" class="summary-value">R$ 0,00</span></div>
+          <div class="summary-row sub-row"><span class="summary-label">Frete</span><span id="valorFrete" class="summary-value">R$ 0,00</span></div>
+          <div class="summary-row total-row"><span class="summary-label">TOTAL FINAL</span><span id="totalFinal" class="summary-total">R$ 0,00</span></div>
+          <div class="summary-row custo-m2-row" id="custoM2Row" style="display:none;"><span class="summary-label">Custo por m²</span><span id="custoM2" class="summary-custo-m2">R$ 0,00</span></div>
         </div>
       </div>
     </section>
 
-    <!-- Action Buttons -->
     <div class="actions-bar">
       <button class="btn-outline" onclick="limparOrcamento()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
         Limpar Orçamento
       </button>
       <button class="btn-primary" onclick="imprimirOrcamento()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
         Imprimir Orçamento
       </button>
     </div>
   </main>
 
-  <!-- Footer -->
+  <!-- ========== TAB: ADMIN ========== -->
+  <main class="main-content tab-content" id="tabContentAdmin">
+    <div class="page-header">
+      <h1 class="page-title">Painel <span class="gold">Administrador</span></h1>
+      <p class="page-subtitle">Gerencie os usuários da plataforma</p>
+    </div>
+
+    <section class="card">
+      <!-- Filtros -->
+      <div class="admin-filters">
+        <button class="filter-btn active" data-filter="todos" onclick="setFiltro('todos')">Todos <span class="filter-count" id="countTodos">0</span></button>
+        <button class="filter-btn" data-filter="pendente" onclick="setFiltro('pendente')">Pendentes <span class="filter-count filter-count-pending" id="countPendentes">0</span></button>
+        <button class="filter-btn" data-filter="aprovado" onclick="setFiltro('aprovado')">Aprovados <span class="filter-count filter-count-approved" id="countAprovados">0</span></button>
+        <button class="filter-btn" data-filter="rejeitado" onclick="setFiltro('rejeitado')">Rejeitados <span class="filter-count filter-count-rejected" id="countRejeitados">0</span></button>
+        <button class="btn-outline" style="margin-left:auto;padding:8px 16px;font-size:0.82rem;" onclick="carregarUsuarios()">↻ Atualizar</button>
+      </div>
+
+      <!-- Tabela de Usuários -->
+      <div class="table-wrapper">
+        <table class="budget-table admin-table">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Permissão</th>
+              <th>Status</th>
+              <th>Cadastro</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaUsuarios">
+            <tr><td colspan="6" style="text-align:center;padding:48px;color:#a1a1aa;">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
   <footer class="footer">
     <p>&copy; 2026 Lugh Lighting. Todos os direitos reservados.</p>
   </footer>
 
+  <script src="../firebase-config.js"></script>
   <script src="../auth.js"></script>
+  <script src="../admin.js"></script>
   <script src="../calculadora.js"></script>
+
+  <script>
+    // Tab switching
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(tabName === 'calculadora' ? 'tabContentCalculadora' : 'tabContentAdmin').classList.add('active');
+
+      if (tabName === 'admin') {
+        carregarUsuarios();
+      }
+    }
+
+    // Init: verify auth and role
+    async function initPage() {
+      const user = checkAuth();
+      if (!user) {
+        window.location.href = '/login/';
+        return;
+      }
+
+      // Display user info
+      const userNameEl = document.getElementById('userName');
+      const userAvatarEl = document.getElementById('userAvatar');
+      if (userNameEl && user.name) userNameEl.textContent = user.name;
+      if (userAvatarEl && user.picture) userAvatarEl.src = user.picture;
+
+      // Verify with Firestore
+      try {
+        initFirebase();
+        const userData = await buscarUsuario(user.email);
+
+        if (!userData || userData.status !== 'aprovado') {
+          window.location.href = '/login/';
+          return;
+        }
+
+        // Update session with latest role
+        user.role = userData.role;
+        user.status = userData.status;
+        sessionStorage.setItem('lugh_user', JSON.stringify(user));
+
+        // Show admin tab if admin
+        if (userData.role === 'admin') {
+          document.getElementById('tabAdmin').style.display = 'inline-flex';
+        }
+      } catch (err) {
+        console.error('Error verifying user:', err);
+      }
+    }
+
+    initPage();
+  </script>
 </body>
 </html>
