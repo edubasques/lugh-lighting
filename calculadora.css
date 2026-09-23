@@ -233,6 +233,11 @@ body {
   margin-bottom: 0;
 }
 
+.form-grid-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  margin-bottom: 0;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -545,7 +550,8 @@ body {
   }
 
   .form-grid,
-  .form-grid-3 {
+  .form-grid-3,
+  .form-grid-4 {
     grid-template-columns: 1fr;
     gap: 16px;
   }

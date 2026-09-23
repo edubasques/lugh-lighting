@@ -178,6 +178,7 @@ function renderizarTabela() {
 // ---- Recalculate Everything ----
 function recalcularTudo() {
   const margem = parseFloat(document.getElementById('margemLucro').value) || 0;
+  const impostoNFPercent = parseFloat(document.getElementById('impostoNFRevenda').value) || 0;
   const custoRT = parseFloat(document.getElementById('custoRT').value) || 0;
   const custoFrete = parseFloat(document.getElementById('custoFrete').value) || 0;
   const area = parseFloat(document.getElementById('areaAmbiente').value) || 0;
@@ -200,14 +201,20 @@ function recalcularTudo() {
   const valorPis = baseTributavel * IMPOSTOS.PIS;
   const valorCofins = baseTributavel * IMPOSTOS.COFINS;
 
-  // Total com impostos
+  // Total com impostos de compra
   const totalComImpostos = subtotalProdutos + totalIPI + valorDifal + valorPis + valorCofins;
 
   // Margem de lucro sobre o total com impostos
   const valorMargem = totalComImpostos * (margem / 100);
 
+  // Preço de venda (base para o imposto da NF de revenda)
+  const precoVenda = totalComImpostos + valorMargem;
+
+  // Imposto sobre a NF de revenda emitida pela Lugh (ICMS MG + Simples/LP)
+  const valorImpostoNF = precoVenda * (impostoNFPercent / 100);
+
   // Total final
-  const totalFinal = totalComImpostos + valorMargem + custoRT + custoFrete;
+  const totalFinal = precoVenda + valorImpostoNF + custoRT + custoFrete;
 
   // Atualizar UI
   document.getElementById('subtotalProdutos').textContent = formatBRL(subtotalProdutos);
@@ -219,6 +226,10 @@ function recalcularTudo() {
 
   document.getElementById('margemLabel').textContent = margem;
   document.getElementById('valorMargem').textContent = formatBRL(valorMargem);
+
+  document.getElementById('impostoNFLabel').textContent = impostoNFPercent.toLocaleString('pt-BR');
+  document.getElementById('valorImpostoNF').textContent = formatBRL(valorImpostoNF);
+
   document.getElementById('valorRT').textContent = formatBRL(custoRT);
   document.getElementById('valorFrete').textContent = formatBRL(custoFrete);
 
