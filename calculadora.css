@@ -919,3 +919,12 @@ body {
     font-size: 9pt;
   }
 }
+
+/* Client vs Internal Print Logic */
+@media print {
+  .actions { display: none !important; }
+  .col-acoes { display: none !important; }
+  body.print-cliente .col-custo { display: none !important; }
+  body.print-cliente .summary-breakdown { display: none !important; }
+  body.print-cliente .summary-total { margin-top: 0; border-top: none; }
+}

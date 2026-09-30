@@ -311,7 +311,7 @@ function renderizarTabela() {
         <td class="col-custo">${formatBRL(item.precoUnitario)}</td>
         <td class="col-venda highlight-text" style="color: var(--accent-gold); font-weight: 500;">—</td>
         <td class="col-total highlight-text" style="color: var(--accent-gold); font-weight: 700;">—</td>
-        <td><button class="btn-remover" onclick="removerItem(${i})">Remover</button></td>
+        <td class="col-acoes"><button class="btn-remover" onclick="removerItem(${i})">Remover</button></td>
       </tr>`)
     .join('');
 }
@@ -460,7 +460,14 @@ function limparOrcamento() {
 }
 
 // ---- Print Budget ----
-function imprimirOrcamento() {
+function gerarPdfCliente() {
+  document.body.classList.add('print-cliente');
+  window.print();
+  document.body.classList.remove('print-cliente');
+}
+
+function gerarPdfInterno() {
+  // Não adiciona a classe print-cliente, então mostra a memória de cálculo e custos
   window.print();
 }
 
