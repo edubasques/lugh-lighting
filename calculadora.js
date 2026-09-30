@@ -251,7 +251,7 @@ function renderizarTabela() {
   if (itensOrcamento.length === 0) {
     tabelaBody.innerHTML = `
       <tr class="empty-state-row">
-        <td colspan="7" class="empty-state">
+        <td colspan="8" class="empty-state">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3;margin-bottom:8px"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
           <span>Nenhum item adicionado ao orçamento</span>
         </td>
@@ -266,8 +266,9 @@ function renderizarTabela() {
         <td>${item.tipo}</td>
         <td>${item.modelo}</td>
         <td>${item.quantidade}</td>
-        <td>${formatBRL(item.precoUnitario)}</td>
-        <td>${formatBRL(item.subtotal)}</td>
+        <td class="col-custo">${formatBRL(item.precoUnitario)}</td>
+        <td class="col-venda highlight-text" style="color: var(--accent-gold); font-weight: 500;">—</td>
+        <td class="col-total highlight-text" style="color: var(--accent-gold); font-weight: 700;">—</td>
         <td><button class="btn-remover" onclick="removerItem(${i})">Remover</button></td>
       </tr>`)
     .join('');
@@ -343,12 +344,29 @@ function recalcularTudo() {
   const valorRT = totalAntesImpostos * (percRT / 100);
 
   // ========================================
-  // VALOR DE VENDA
+  // VALOR DE VENDA E RATEIO
   // ========================================
   const valorVenda = totalAntesImpostos + valorSimples + valorRT;
+  
+  // Fator multiplicador para rateio na tabela de itens
+  const fatorRateio = valorProdutos > 0 ? (valorVenda / valorProdutos) : 1;
+
+  // Atualizar colunas Venda Unitária e Total Venda na Tabela
+  const trs = document.querySelectorAll('#tabelaItens tr:not(.empty-state-row)');
+  trs.forEach((tr, i) => {
+    const item = itensOrcamento[i];
+    if (item) {
+      const vendaUnit = item.precoUnitario * fatorRateio;
+      const vendaTotal = item.subtotal * fatorRateio;
+      const colVenda = tr.querySelector('.col-venda');
+      const colTotal = tr.querySelector('.col-total');
+      if(colVenda) colVenda.textContent = formatBRL(vendaUnit);
+      if(colTotal) colTotal.textContent = formatBRL(vendaTotal);
+    }
+  });
 
   // ========================================
-  // ATUALIZAR UI
+  // ATUALIZAR UI DO RESUMO
   // ========================================
 
   // Labels dinâmicos
