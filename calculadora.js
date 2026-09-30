@@ -240,19 +240,26 @@ function getProdutoSelecionado() {
 function adicionarItem() {
   const tipoSelect = document.getElementById('tipoLuminaria');
   const modeloSelect = document.getElementById('modeloLuminaria');
+  const corInput = document.getElementById('corLuminaria');
   const quantidadeInput = document.getElementById('quantidade');
 
   const tipo = tipoSelect.value;
   const produto = getProdutoSelecionado();
+  const cor = corInput.value.trim();
   const quantidade = parseInt(quantidadeInput.value, 10);
 
   if (!tipo) { tipoSelect.focus(); return; }
   if (!produto) { modeloSelect.focus(); return; }
   if (!quantidade || quantidade < 1) { quantidadeInput.focus(); return; }
 
+  let nomeFinal = produto.modelo;
+  if (cor) {
+    nomeFinal += ` - Cor/Opção: ${cor}`;
+  }
+
   itensOrcamento.push({
     tipo,
-    modelo: produto.modelo,
+    modelo: nomeFinal,
     ncm: produto.ncm,
     quantidade,
     precoUnitario: produto.preco,
@@ -263,6 +270,7 @@ function adicionarItem() {
   tipoSelect.value = '';
   modeloSelect.innerHTML = '<option value="">Selecione o modelo...</option>';
   modeloSelect.disabled = true;
+  corInput.value = '';
   quantidadeInput.value = 1;
   document.getElementById('precoUnitario').value = '';
   tipoSelect.focus();
