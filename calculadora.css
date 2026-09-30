@@ -238,6 +238,34 @@ body {
   margin-bottom: 0;
 }
 
+.form-grid-5 {
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  margin-bottom: 0;
+}
+
+.form-grid-2 {
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 0;
+}
+
+.params-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-gold);
+  margin-top: 20px;
+  margin-bottom: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.params-section-label:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -719,8 +747,10 @@ body {
   }
 
   .form-grid,
+  .form-grid-2,
   .form-grid-3,
-  .form-grid-4 {
+  .form-grid-4,
+  .form-grid-5 {
     grid-template-columns: 1fr;
     gap: 16px;
   }

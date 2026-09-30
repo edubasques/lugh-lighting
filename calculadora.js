@@ -1,48 +1,38 @@
 /* ========================================
    Lugh Lighting — Calculadora de Luminárias
+   Ordem de cálculo conforme planilha
    ======================================== */
-
-// ---- Alíquotas de Impostos (SP → MG) ----
-const IMPOSTOS = {
-  ICMS_INTERESTADUAL: 0.12,  // 12% já incluso no preço NF do fornecedor SP
-  ICMS_INTERNO_MG: 0.18,     // 18% alíquota interna MG
-  DIFAL: 0.06,               // 18% - 12% = 6%
-  PIS: 0.0165,               // 1,65%
-  COFINS: 0.076,             // 7,6%
-  IPI: 0.05,                 // 5% padrão (varia por NCM, pode ser ajustado por produto)
-};
 
 // ---- Product Catalog ----
 // Preços = preço NF do fornecedor (com ICMS-SP incluso)
-// ipi = alíquota IPI específica do produto (se diferente do padrão)
 const CATALOGO = {
   'Embutida': [
-    { modelo: 'Embutida Quadrada 12W', preco: 89.90, ncm: '9405.10.99', ipi: 0.05 },
-    { modelo: 'Embutida Redonda 18W', preco: 119.90, ncm: '9405.10.99', ipi: 0.05 },
-    { modelo: 'Embutida Quadrada 24W', preco: 149.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Embutida Quadrada 12W', preco: 89.90, ncm: '9405.10.99' },
+    { modelo: 'Embutida Redonda 18W', preco: 119.90, ncm: '9405.10.99' },
+    { modelo: 'Embutida Quadrada 24W', preco: 149.90, ncm: '9405.10.99' },
   ],
   'Sobrepor': [
-    { modelo: 'Plafon Sobrepor 20W', preco: 129.90, ncm: '9405.10.99', ipi: 0.05 },
-    { modelo: 'Plafon Sobrepor 30W', preco: 179.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Plafon Sobrepor 20W', preco: 129.90, ncm: '9405.10.99' },
+    { modelo: 'Plafon Sobrepor 30W', preco: 179.90, ncm: '9405.10.99' },
   ],
   'Pendente': [
-    { modelo: 'Pendente Cilíndrico', preco: 259.90, ncm: '9405.10.99', ipi: 0.05 },
-    { modelo: 'Pendente Industrial', preco: 349.90, ncm: '9405.10.99', ipi: 0.05 },
-    { modelo: 'Pendente Decorativo', preco: 449.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Pendente Cilíndrico', preco: 259.90, ncm: '9405.10.99' },
+    { modelo: 'Pendente Industrial', preco: 349.90, ncm: '9405.10.99' },
+    { modelo: 'Pendente Decorativo', preco: 449.90, ncm: '9405.10.99' },
   ],
   'Trilho/Spot': [
-    { modelo: 'Spot Trilho 7W', preco: 79.90, ncm: '9405.10.99', ipi: 0.05 },
-    { modelo: 'Spot Trilho 12W', preco: 109.90, ncm: '9405.10.99', ipi: 0.05 },
-    { modelo: 'Trilho 1m + 3 Spots', preco: 389.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Spot Trilho 7W', preco: 79.90, ncm: '9405.10.99' },
+    { modelo: 'Spot Trilho 12W', preco: 109.90, ncm: '9405.10.99' },
+    { modelo: 'Trilho 1m + 3 Spots', preco: 389.90, ncm: '9405.10.99' },
   ],
   'Fita LED': [
-    { modelo: 'Fita LED 5m 4000K', preco: 89.90, ncm: '9405.40.90', ipi: 0.05 },
-    { modelo: 'Fita LED 5m RGB', preco: 139.90, ncm: '9405.40.90', ipi: 0.05 },
-    { modelo: 'Fita LED 5m Profissional', preco: 199.90, ncm: '9405.40.90', ipi: 0.05 },
+    { modelo: 'Fita LED 5m 4000K', preco: 89.90, ncm: '9405.40.90' },
+    { modelo: 'Fita LED 5m RGB', preco: 139.90, ncm: '9405.40.90' },
+    { modelo: 'Fita LED 5m Profissional', preco: 199.90, ncm: '9405.40.90' },
   ],
   'Arandela': [
-    { modelo: 'Arandela Efeito 6W', preco: 99.90, ncm: '9405.10.99', ipi: 0.05 },
-    { modelo: 'Arandela Facho Duplo 12W', preco: 159.90, ncm: '9405.10.99', ipi: 0.05 },
+    { modelo: 'Arandela Efeito 6W', preco: 99.90, ncm: '9405.10.99' },
+    { modelo: 'Arandela Facho Duplo 12W', preco: 159.90, ncm: '9405.10.99' },
   ],
 };
 
@@ -121,7 +111,6 @@ function adicionarItem() {
     tipo,
     modelo: produto.modelo,
     ncm: produto.ncm,
-    ipi: produto.ipi || IMPOSTOS.IPI,
     quantidade,
     precoUnitario: produto.preco,
     subtotal: produto.preco * quantidade,
@@ -175,71 +164,120 @@ function renderizarTabela() {
     .join('');
 }
 
-// ---- Recalculate Everything ----
+// =============================================
+// RECALCULAR TUDO — Segue a ordem da planilha
+// =============================================
 function recalcularTudo() {
-  const margem = parseFloat(document.getElementById('margemLucro').value) || 0;
-  const impostoNFPercent = parseFloat(document.getElementById('impostoNFRevenda').value) || 0;
-  const custoRT = parseFloat(document.getElementById('custoRT').value) || 0;
-  const custoFrete = parseFloat(document.getElementById('custoFrete').value) || 0;
+  // Ler parâmetros
+  const percDifal = parseFloat(document.getElementById('percDifal').value) || 0;
+  const percIpi = parseFloat(document.getElementById('percIpi').value) || 0;
+  const percPis = parseFloat(document.getElementById('percPis').value) || 0;
+  const percCofins = parseFloat(document.getElementById('percCofins').value) || 0;
+  const freteFabrica = parseFloat(document.getElementById('freteFabrica').value) || 0;
+  const moProjetista = parseFloat(document.getElementById('moProjetista').value) || 0;
   const area = parseFloat(document.getElementById('areaAmbiente').value) || 0;
+  const freteCliente = parseFloat(document.getElementById('freteCliente').value) || 0;
+  const percMargem = parseFloat(document.getElementById('margemLucro').value) || 0;
+  const percSimples = parseFloat(document.getElementById('percSimples').value) || 0;
+  const percRT = parseFloat(document.getElementById('percRT').value) || 0;
 
-  // Subtotal dos produtos (preço NF fornecedor)
-  const subtotalProdutos = itensOrcamento.reduce((acc, item) => acc + item.subtotal, 0);
+  // ========================================
+  // CUSTO PRODUTOS
+  // ========================================
 
-  // Calcular IPI por item (cada produto pode ter alíquota diferente)
-  const totalIPI = itensOrcamento.reduce((acc, item) => {
-    return acc + (item.subtotal * (item.ipi || IMPOSTOS.IPI));
-  }, 0);
+  // 1. VALOR PRODUTOS (subtotal dos itens)
+  const valorProdutos = itensOrcamento.reduce((acc, item) => acc + item.subtotal, 0);
 
-  // Base para os demais impostos
-  const baseTributavel = subtotalProdutos;
+  // 2. DIFAL (6% a 13%)
+  const valorDifal = valorProdutos * (percDifal / 100);
 
-  // DIFAL = (ICMS_MG - ICMS_INTERESTADUAL) sobre o preço
-  const valorDifal = baseTributavel * IMPOSTOS.DIFAL;
+  // 3. IPI (5%)
+  const valorIpi = valorProdutos * (percIpi / 100);
 
-  // PIS e COFINS sobre o faturamento (preço de revenda)
-  const valorPis = baseTributavel * IMPOSTOS.PIS;
-  const valorCofins = baseTributavel * IMPOSTOS.COFINS;
+  // 4. PIS (1,65%)
+  const valorPis = valorProdutos * (percPis / 100);
 
-  // Total com impostos de compra
-  const totalComImpostos = subtotalProdutos + totalIPI + valorDifal + valorPis + valorCofins;
+  // 5. COFINS (7,6%)
+  const valorCofins = valorProdutos * (percCofins / 100);
 
-  // Margem de lucro sobre o total com impostos
-  const valorMargem = totalComImpostos * (margem / 100);
+  // 6. FRETE FÁBRICA (valor fixo)
+  // já lido acima
 
-  // Preço de venda (base para o imposto da NF de revenda)
-  const precoVenda = totalComImpostos + valorMargem;
+  // 7. M.O. PROJETISTA POR M²
+  const valorMO = moProjetista * area;
 
-  // Imposto sobre a NF de revenda emitida pela Lugh (ICMS MG + Simples/LP)
-  const valorImpostoNF = precoVenda * (impostoNFPercent / 100);
+  // 8. TOTAL PRODUTOS COM IMPOSTOS
+  const totalProdutosImpostos = valorProdutos + valorDifal + valorIpi + valorPis + valorCofins + freteFabrica + valorMO;
 
-  // Total final
-  const totalFinal = precoVenda + valorImpostoNF + custoRT + custoFrete;
+  // ========================================
+  // OUTROS CUSTOS E MARGEM
+  // ========================================
 
-  // Atualizar UI
-  document.getElementById('subtotalProdutos').textContent = formatBRL(subtotalProdutos);
+  // 9. FRETE ENTREGA CLIENTE FINAL (valor fixo)
+  // já lido acima
+
+  // 10. MARGEM DE LUCRO (38%)
+  const baseMargem = totalProdutosImpostos + freteCliente;
+  const valorMargem = baseMargem * (percMargem / 100);
+
+  // 11. TOTAL PRODUTOS PARA VENDA ANTES DOS IMPOSTOS
+  const totalAntesImpostos = baseMargem + valorMargem;
+
+  // ========================================
+  // IMPOSTOS SOBRE VENDA
+  // ========================================
+
+  // 12. IMPOSTO SIMPLES NACIONAL (15%)
+  const valorSimples = totalAntesImpostos * (percSimples / 100);
+
+  // 13. RT ARQUITETO (10%)
+  const valorRT = totalAntesImpostos * (percRT / 100);
+
+  // ========================================
+  // VALOR DE VENDA
+  // ========================================
+  const valorVenda = totalAntesImpostos + valorSimples + valorRT;
+
+  // ========================================
+  // ATUALIZAR UI
+  // ========================================
+
+  // Labels dinâmicos
+  document.getElementById('difalLabel').textContent = percDifal.toLocaleString('pt-BR');
+  document.getElementById('ipiLabel').textContent = percIpi.toLocaleString('pt-BR');
+  document.getElementById('pisLabel').textContent = percPis.toLocaleString('pt-BR');
+  document.getElementById('cofinsLabel').textContent = percCofins.toLocaleString('pt-BR');
+  document.getElementById('margemLabel').textContent = percMargem.toLocaleString('pt-BR');
+  document.getElementById('simplesLabel').textContent = percSimples.toLocaleString('pt-BR');
+  document.getElementById('rtLabel').textContent = percRT.toLocaleString('pt-BR');
+
+  // Custo Produtos
+  document.getElementById('valorProdutos').textContent = formatBRL(valorProdutos);
   document.getElementById('valorDifal').textContent = formatBRL(valorDifal);
-  document.getElementById('valorIpi').textContent = formatBRL(totalIPI);
+  document.getElementById('valorIpi').textContent = formatBRL(valorIpi);
   document.getElementById('valorPis').textContent = formatBRL(valorPis);
   document.getElementById('valorCofins').textContent = formatBRL(valorCofins);
-  document.getElementById('totalComImpostos').textContent = formatBRL(totalComImpostos);
+  document.getElementById('valorFreteFabrica').textContent = formatBRL(freteFabrica);
+  document.getElementById('valorMO').textContent = formatBRL(valorMO);
+  document.getElementById('totalProdutosImpostos').textContent = formatBRL(totalProdutosImpostos);
 
-  document.getElementById('margemLabel').textContent = margem;
+  // Outros Custos e Margem
+  document.getElementById('valorFreteCliente').textContent = formatBRL(freteCliente);
   document.getElementById('valorMargem').textContent = formatBRL(valorMargem);
+  document.getElementById('totalAntesImpostos').textContent = formatBRL(totalAntesImpostos);
 
-  document.getElementById('impostoNFLabel').textContent = impostoNFPercent.toLocaleString('pt-BR');
-  document.getElementById('valorImpostoNF').textContent = formatBRL(valorImpostoNF);
+  // Impostos sobre venda
+  document.getElementById('valorSimples').textContent = formatBRL(valorSimples);
+  document.getElementById('valorRT').textContent = formatBRL(valorRT);
 
-  document.getElementById('valorRT').textContent = formatBRL(custoRT);
-  document.getElementById('valorFrete').textContent = formatBRL(custoFrete);
+  // Valor de Venda
+  document.getElementById('valorVenda').textContent = formatBRL(valorVenda);
 
-  document.getElementById('totalFinal').textContent = formatBRL(totalFinal);
-
-  // Custo por m²
+  // Valor por m²
   const custoM2Row = document.getElementById('custoM2Row');
-  if (area > 0 && totalFinal > 0) {
+  if (area > 0 && valorVenda > 0) {
     custoM2Row.style.display = 'flex';
-    document.getElementById('custoM2').textContent = formatBRL(totalFinal / area);
+    document.getElementById('custoM2').textContent = formatBRL(valorVenda / area);
   } else {
     custoM2Row.style.display = 'none';
   }
@@ -249,7 +287,6 @@ function recalcularTudo() {
 function limparOrcamento() {
   itensOrcamento = [];
   renderizarTabela();
-  document.getElementById('areaAmbiente').value = '';
   recalcularTudo();
 }
 
