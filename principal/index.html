@@ -121,7 +121,7 @@
         Adicionar Item
       </h2>
       <form id="calculatorForm" onsubmit="return false;">
-        <div class="form-grid">
+        <div class="form-row" style="display: grid; grid-template-columns: 1.5fr 2fr 1fr; gap: 16px; margin-bottom: 16px;">
           <div class="form-group">
             <label for="tipoLuminaria">Tipo de Luminária</label>
             <select id="tipoLuminaria" required>
@@ -148,19 +148,122 @@
             <label for="corLuminaria">Cor / Detalhe</label>
             <input type="text" id="corLuminaria" placeholder="Ex: Preto, Branco, 3000K">
           </div>
+        </div>
+        
+        <div class="form-row" style="display: grid; grid-template-columns: 1.5fr 1.5fr 1fr 0.8fr 1fr; gap: 16px; align-items: end;">
           <div class="form-group">
-            <label for="quantidade">Quantidade</label>
+            <label for="ambienteLuminaria">Ambiente</label>
+            <input type="text" id="ambienteLuminaria" list="listaAmbientes" placeholder="Ex: Sala de Estar" required>
+          </div>
+          <div class="form-group">
+            <label for="localLuminaria">Local</label>
+            <input type="text" id="localLuminaria" list="listaLocais" placeholder="Ex: Sanca" required>
+          </div>
+          <div class="form-group">
+            <label for="acendimentoLuminaria">Acend.</label>
+            <input type="text" id="acendimentoLuminaria" placeholder="Ex: C1" required>
+          </div>
+          <div class="form-group">
+            <label for="quantidade">Qtd.</label>
             <input type="number" id="quantidade" min="1" value="1" required>
           </div>
           <div class="form-group">
-            <label for="precoUnitario">Preço NF Fornecedor (R$)</label>
-            <input type="text" id="precoUnitario" readonly placeholder="—">
+            <button type="button" class="btn-primary" style="width: 100%;" onclick="adicionarItem()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Adicionar
+            </button>
           </div>
         </div>
-        <button type="button" class="btn-primary" onclick="adicionarItem()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Adicionar ao Orçamento
-        </button>
+
+        <datalist id="listaAmbientes">
+          <option value="Hall"></option>
+          <option value="Hall Externo"></option>
+          <option value="Hall Interno"></option>
+          <option value="Estar"></option>
+          <option value="Sala de Estar"></option>
+          <option value="Sala de Jantar"></option>
+          <option value="Antesala"></option>
+          <option value="Copa"></option>
+          <option value="Cozinha"></option>
+          <option value="Apoio"></option>
+          <option value="Área Serviço"></option>
+          <option value="Lavanderia"></option>
+          <option value="Depósito"></option>
+          <option value="Circulação"></option>
+          <option value="Circulação Externa"></option>
+          <option value="Circulação Interna"></option>
+          <option value="Suite 01"></option>
+          <option value="Suíte 02"></option>
+          <option value="Suíte 03"></option>
+          <option value="Suíte 04"></option>
+          <option value="Suíte 05"></option>
+          <option value="Suíte 06"></option>
+          <option value="Dormitório 01"></option>
+          <option value="Dormitório 02"></option>
+          <option value="Dormitório 03"></option>
+          <option value="Dormitório 04"></option>
+          <option value="Dormitório 05"></option>
+          <option value="Quarto Funcionarios"></option>
+          <option value="Suíte Frente"></option>
+          <option value="Suíte Fundos"></option>
+          <option value="Banho Suíte 01"></option>
+          <option value="Banho Suíte 02"></option>
+          <option value="Banho Suíte 03"></option>
+          <option value="Banho Suíte 04"></option>
+          <option value="Banho Suíte 05"></option>
+          <option value="Banho Suíte 06"></option>
+          <option value="Banho Dorm. 01"></option>
+          <option value="Banho Dorm. 02"></option>
+          <option value="Banho Dorm. 03"></option>
+          <option value="Banho Dorm. 04"></option>
+          <option value="Banho Dorm. 05"></option>
+          <option value="Box"></option>
+          <option value="Sauna"></option>
+          <option value="Sauna Seca"></option>
+          <option value="Sauna Molhada"></option>
+          <option value="Closet"></option>
+          <option value="Lavabo"></option>
+          <option value="Lavador"></option>
+          <option value="Adega"></option>
+          <option value="Garagem"></option>
+          <option value="Despensa"></option>
+          <option value="Piscina"></option>
+          <option value="Churrasqueira"></option>
+          <option value="Área Lazer"></option>
+          <option value="Varanda"></option>
+          <option value="Gourmet"></option>
+          <option value="Escritório"></option>
+          <option value="Paisagismo"></option>
+        </datalist>
+
+        <datalist id="listaLocais">
+          <option value="Geral"></option>
+          <option value="Destaque"></option>
+          <option value="Indireta"></option>
+          <option value="Sanca"></option>
+          <option value="Cortineiro"></option>
+          <option value="Obras"></option>
+          <option value="Passagem"></option>
+          <option value="Painel"></option>
+          <option value="Nicho"></option>
+          <option value="Bancada"></option>
+          <option value="Rodapé"></option>
+          <option value="Marcenaria"></option>
+          <option value="Marcenaria Superior"></option>
+          <option value="Teto"></option>
+          <option value="Piso"></option>
+          <option value="Parede"></option>
+          <option value="Balizamento"></option>
+          <option value="Degraus"></option>
+          <option value="Banco"></option>
+          <option value="Prateleiras"></option>
+          <option value="Serralheria"></option>
+          <option value="Deck"></option>
+          <option value="Up Light"></option>
+          <option value="Down Light"></option>
+          <option value="Floreira"></option>
+          <option value="Arbusto"></option>
+        </datalist>
       </form>
     </section>
 
@@ -175,8 +278,8 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Categoria</th>
-              <th>Modelo</th>
+              <th>Localização</th>
+              <th>Produto</th>
               <th>Qtd</th>
               <th class="col-custo">Custo Unit.</th>
               <th style="color: var(--accent-gold);">Venda Unit.</th>

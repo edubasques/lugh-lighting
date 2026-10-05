@@ -241,15 +241,23 @@ function adicionarItem() {
   const tipoSelect = document.getElementById('tipoLuminaria');
   const modeloSelect = document.getElementById('modeloLuminaria');
   const corInput = document.getElementById('corLuminaria');
+  const ambienteInput = document.getElementById('ambienteLuminaria');
+  const localInput = document.getElementById('localLuminaria');
+  const acendimentoInput = document.getElementById('acendimentoLuminaria');
   const quantidadeInput = document.getElementById('quantidade');
 
   const tipo = tipoSelect.value;
   const produto = getProdutoSelecionado();
   const cor = corInput.value.trim();
+  const ambiente = ambienteInput.value.trim();
+  const local = localInput.value.trim();
+  const acendimento = acendimentoInput.value.trim();
   const quantidade = parseInt(quantidadeInput.value, 10);
 
   if (!tipo) { tipoSelect.focus(); return; }
   if (!produto) { modeloSelect.focus(); return; }
+  if (!ambiente) { ambienteInput.focus(); return; }
+  if (!local) { localInput.focus(); return; }
   if (!quantidade || quantidade < 1) { quantidadeInput.focus(); return; }
 
   let nomeFinal = produto.modelo;
@@ -260,6 +268,9 @@ function adicionarItem() {
   itensOrcamento.push({
     tipo,
     modelo: nomeFinal,
+    ambiente,
+    local,
+    acendimento,
     ncm: produto.ncm,
     quantidade,
     precoUnitario: produto.preco,
@@ -271,6 +282,9 @@ function adicionarItem() {
   modeloSelect.innerHTML = '<option value="">Selecione o modelo...</option>';
   modeloSelect.disabled = true;
   corInput.value = '';
+  ambienteInput.value = '';
+  localInput.value = '';
+  acendimentoInput.value = '';
   quantidadeInput.value = 1;
   document.getElementById('precoUnitario').value = '';
   tipoSelect.focus();
@@ -305,8 +319,14 @@ function renderizarTabela() {
     .map((item, i) => `
       <tr>
         <td>${i + 1}</td>
-        <td>${item.tipo}</td>
-        <td>${item.modelo}</td>
+        <td>
+          <div style="font-weight: 500; margin-bottom: 2px;">${item.ambiente}</div>
+          <div style="font-size: 0.85em; color: #666;">${item.local} ${item.acendimento ? `(Acend: ${item.acendimento})` : ''}</div>
+        </td>
+        <td>
+          <div style="font-weight: 500; margin-bottom: 2px;">${item.tipo}</div>
+          <div style="font-size: 0.85em; color: #666;">${item.modelo}</div>
+        </td>
         <td>${item.quantidade}</td>
         <td class="col-custo">${formatBRL(item.precoUnitario)}</td>
         <td class="col-venda highlight-text" style="color: var(--accent-gold); font-weight: 500;">—</td>
