@@ -121,7 +121,7 @@
         Adicionar Item
       </h2>
       <form id="calculatorForm" onsubmit="return false;">
-        <div class="form-row" style="display: grid; grid-template-columns: 1.5fr 2fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
           <div class="form-group">
             <label for="tipoLuminaria">Tipo de Luminária</label>
             <select id="tipoLuminaria" required>
@@ -150,7 +150,7 @@
           </div>
         </div>
         
-        <div class="form-row" style="display: grid; grid-template-columns: 1.5fr 1.5fr 1fr 0.8fr 1fr; gap: 16px; align-items: end;">
+        <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: end; margin-bottom: 16px;">
           <div class="form-group">
             <label for="ambienteLuminaria">Ambiente</label>
             <input type="text" id="ambienteLuminaria" list="listaAmbientes" placeholder="Ex: Sala de Estar" required>

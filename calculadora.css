@@ -928,3 +928,5 @@ body {
   body.print-cliente .summary-breakdown { display: none !important; }
   body.print-cliente .summary-total { margin-top: 0; border-top: none; }
 }
+
+.form-row .form-group { flex: 1 1 150px; }

@@ -195,7 +195,7 @@ function atualizarModelos() {
   const tipo = tipoSelect.value;
 
   modeloSelect.innerHTML = '<option value="">Selecione o modelo...</option>';
-  precoInput.value = '';
+  if (precoInput) precoInput.value = \'\';
 
   if (tipo && CATALOGO[tipo]) {
     modeloSelect.disabled = false;
@@ -219,11 +219,11 @@ function atualizarPreco() {
   if (tipo && modelo && CATALOGO[tipo]) {
     const produto = CATALOGO[tipo].find((p) => p.modelo === modelo);
     if (produto) {
-      precoInput.value = formatBRL(produto.preco);
+      if (precoInput) precoInput.value = formatBRL(produto.preco);
       return;
     }
   }
-  precoInput.value = '';
+  if (precoInput) precoInput.value = \'\';
 }
 
 // ---- Get Selected Product ----
@@ -286,7 +286,7 @@ function adicionarItem() {
   localInput.value = '';
   acendimentoInput.value = '';
   quantidadeInput.value = 1;
-  document.getElementById('precoUnitario').value = '';
+  if (document.getElementById(\'precoUnitario\')) document.getElementById(\'precoUnitario\').value = \'\';
   tipoSelect.focus();
 
   renderizarTabela();
