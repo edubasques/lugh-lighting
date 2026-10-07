@@ -199,14 +199,14 @@ function atualizarModelos() {
   if (tipo && CATALOGO[tipo]) {
     CATALOGO[tipo].forEach((item) => {
       const opt = document.createElement('option');
-      opt.value = item.modelo; opt.textContent = item.modelo;
+      opt.value = item.modelo; const userList = []; let foundPeca = userList.find(p => item.modelo.includes(p)); opt.textContent = foundPeca || item.modelo;
       modeloLuminaria.appendChild(opt);
     });
   } else if (!tipo) {
     Object.keys(CATALOGO).forEach(cat => {
       CATALOGO[cat].forEach((item) => {
         const opt = document.createElement('option');
-        opt.value = item.modelo; opt.textContent = item.modelo;
+        opt.value = item.modelo; const userList = []; let foundPeca = userList.find(p => item.modelo.includes(p)); opt.textContent = foundPeca || item.modelo;
         modeloLuminaria.appendChild(opt);
       });
     });
@@ -533,6 +533,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 atualizarModelos();
+
+
 
 
 
