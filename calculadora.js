@@ -45,7 +45,7 @@ const CATALOGO = {
     { modelo: 'Eklart - EKPF95 - Perfil Embutir NO FRAME 8,8x1,9 - Branco (3 Metros)', preco: 330.30, ncm: '9405.10.99' },
     { modelo: 'Misterled - SLED9068 - Perfil Embutir Indireto 11W 12V', preco: 273.00, ncm: '9405.10.99' }
   ],
-  'Fitas LED': [
+  'Fitas': [
     { modelo: 'Eklart - EKF5105958MM - Fita Led 5W 2700k IP20 (5 Metros)', preco: 109.51, ncm: '9405.40.90' },
     { modelo: 'Eklart - EKF4148HL95 - Fita Led 5W 2700k 12V IP20 (5 Metros)', preco: 77.67, ncm: '9405.40.90' },
     { modelo: 'Eklart - EKF5105COB95 - Fita Led COB 5W 2700k IP20 (5 Metros)', preco: 202.57, ncm: '9405.40.90' },
@@ -62,7 +62,7 @@ const CATALOGO = {
     { modelo: 'Eklart - EKF514812010PRO - Fita LED PRO 5W 2700K (10 Metros)', preco: 402.40, ncm: '9405.40.90' },
     { modelo: 'Eklart - EKF51406000 - Fita Led 40W 2700k IRC80 (5 Metros)', preco: 196.80, ncm: '9405.40.90' }
   ],
-  'Fontes e Controladores': [
+  'Fontes': [
     { modelo: 'Eklart - EK-CYX-35-24 - Fonte Blindada 35W 24V IP67', preco: 115.80, ncm: '8504.40.21' },
     { modelo: 'Eklart - EK-CYX-75-24 - Fonte Blindada 75W 24V IP67', preco: 182.85, ncm: '8504.40.21' },
     { modelo: 'Eklart - EK-CYX-100-24 - Fonte Blindada 100W 24V IP67', preco: 205.00, ncm: '8504.40.21' },
@@ -86,7 +86,7 @@ const CATALOGO = {
     { modelo: 'Eklart - EKM1M33A - Controladora Dimerizável Wireless', preco: 210.10, ncm: '8504.40.21' },
     { modelo: 'Eklart - EKAMP - Amplificador de Sinal', preco: 228.40, ncm: '8504.40.21' }
   ],
-  'Embutidos de Solo': [
+  'Embutido Solo': [
     { modelo: 'Directlight - DL EB1 - Emb. Solo 2,7W 11º 12V', preco: 174.95, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL EB1 - Emb. Solo 2,7W 34º 12V', preco: 174.95, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL EB1 - Emb. Solo 2,7W 11º BIV', preco: 174.95, ncm: '9405.10.99' },
@@ -100,7 +100,7 @@ const CATALOGO = {
     { modelo: 'Directlight - DL EB3 - Emb. Solo 7,6W 20X65º 12V', preco: 77.73, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL EB5 - Emb. Solo 7,6W 34º BIV', preco: 308.39, ncm: '9405.10.99' }
   ],
-  'Espetos': [
+  'Espeto': [
     { modelo: 'Directlight - DL EP1 - Espeto 2,7W 11º 12V', preco: 179.41, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL EP1 - Espeto 2,7W 11º BIV', preco: 179.41, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL EP1 - Espeto 2,7W 34º 12V', preco: 179.41, ncm: '9405.10.99' },
@@ -108,14 +108,14 @@ const CATALOGO = {
     { modelo: 'Directlight - DL EP3 - Espeto 1,5W 11º BIV', preco: 120.40, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL EP2 - Espeto 7,6W 34º BIV', preco: 316.69, ncm: '9405.10.99' }
   ],
-  'Arandelas e Balizadores': [
+  'Arandela': [
     { modelo: 'Directlight - DL AR8 - Arandela 2,7W 120º 12V', preco: 167.54, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL AR8 - Arandela 2,7W 120º BIV', preco: 305.00, ncm: '9405.10.99' },
     { modelo: 'Interlight - 7450.S.PM - Poste Balizador 6W 90º IP65', preco: 242.00, ncm: '9405.10.99' },
     { modelo: 'Interlight - 3960C.S.PM - Balizador 1W 40º IP65 BIV', preco: 93.18, ncm: '9405.10.99' },
     { modelo: 'Diversos - Balizador Mini 1,5W 60º BIV', preco: 75.78, ncm: '9405.10.99' }
   ],
-  'Spots e Projetores': [
+  'Spot': [
     { modelo: 'Directlight - DL SP1 - Spot 2,7W 11º BIV', preco: 167.54, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL SP1 - Spot 2,7W 34º BIV', preco: 167.54, ncm: '9405.10.99' },
     { modelo: 'Directlight - DL SP2 - Spot 7,6W 11º BIV', preco: 310.93, ncm: '9405.10.99' },
@@ -533,5 +533,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 atualizarModelos();
+
 
 
