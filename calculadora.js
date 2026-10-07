@@ -190,24 +190,24 @@ function formatBRL(valor) {
 // ---- Update Models Dropdown ----
 function atualizarModelos() {
   const tipoInput = document.getElementById('tipoLuminaria');
-  const listaModelos = document.getElementById('listaModelos');
+  const modeloLuminaria = document.getElementById('modeloLuminaria');
   const tipo = tipoInput.value;
 
-  if (!listaModelos) return;
-  listaModelos.innerHTML = '';
+  if (!modeloLuminaria) return;
+  modeloLuminaria.innerHTML = '<option value="">Selecione o modelo...</option>';
   
   if (tipo && CATALOGO[tipo]) {
     CATALOGO[tipo].forEach((item) => {
       const opt = document.createElement('option');
       opt.value = item.modelo;
-      listaModelos.appendChild(opt);
+      modeloLuminaria.appendChild(opt);
     });
   } else if (!tipo) {
     Object.keys(CATALOGO).forEach(cat => {
       CATALOGO[cat].forEach((item) => {
         const opt = document.createElement('option');
         opt.value = item.modelo;
-        listaModelos.appendChild(opt);
+        modeloLuminaria.appendChild(opt);
       });
     });
   }
@@ -533,3 +533,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 atualizarModelos();
+
+
