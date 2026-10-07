@@ -1,4 +1,4 @@
-/* ========================================
+﻿/* ========================================
    Lugh Lighting — Calculadora de Luminárias
    Ordem de cálculo conforme planilha
    ======================================== */
@@ -530,5 +530,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-a t u a l i z a r M o d e l o s ( ) ;  
- 
+
+
+atualizarModelos();

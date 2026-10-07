@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Luminárias | Lugh Lighting</title>
+  <title>Calculadora de LuminÃ¡rias | Lugh Lighting</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
         </button>
         <button class="tab-btn" data-tab="admin" id="tabAdmin" onclick="switchTab('admin')" style="display:none;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Usuários
+          UsuÃ¡rios
         </button>
       </nav>
 
@@ -46,18 +46,18 @@
   <!-- ========== TAB: CALCULADORA ========== -->
   <main class="main-content tab-content active" id="tabContentCalculadora">
     <div class="page-header">
-      <h1 class="page-title">Calculadora de <span class="gold">Luminárias</span></h1>
-      <p class="page-subtitle">Monte seu orçamento completo de iluminação</p>
+      <h1 class="page-title">Calculadora de <span class="gold">LuminÃ¡rias</span></h1>
+      <p class="page-subtitle">Monte seu orÃ§amento completo de iluminaÃ§Ã£o</p>
     </div>
 
-    <!-- Parâmetros do Orçamento -->
+    <!-- ParÃ¢metros do OrÃ§amento -->
     <section class="card params-card">
       <h2 class="card-title">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Parâmetros do Orçamento
+        ParÃ¢metros do OrÃ§amento
       </h2>
 
-      <div class="params-section-label">Impostos sobre Compra (SP → MG)</div>
+      <div class="params-section-label">Impostos sobre Compra (SP â†’ MG)</div>
       <div class="form-grid form-grid-5">
         <div class="form-group">
           <label for="percDifal">DIFAL (%)</label>
@@ -76,7 +76,7 @@
           <input type="number" id="percCofins" min="0" max="100" step="0.1" value="7.6" oninput="recalcularTudo()">
         </div>
         <div class="form-group">
-          <label for="freteFabrica">Frete Fábrica (R$)</label>
+          <label for="freteFabrica">Frete FÃ¡brica (R$)</label>
           <input type="number" id="freteFabrica" min="0" step="0.01" value="0" placeholder="R$ 0,00" oninput="recalcularTudo()">
         </div>
       </div>
@@ -84,11 +84,11 @@
       <div class="params-section-label">M.O. Projetista</div>
       <div class="form-grid form-grid-2">
         <div class="form-group">
-          <label for="moProjetista">M.O. Projetista (R$/m²)</label>
+          <label for="moProjetista">M.O. Projetista (R$/mÂ²)</label>
           <input type="number" id="moProjetista" min="0" step="0.01" value="0" placeholder="R$ 0,00" oninput="recalcularTudo()">
         </div>
         <div class="form-group">
-          <label for="areaAmbiente">Área do ambiente (m²)</label>
+          <label for="areaAmbiente">Ãrea do ambiente (mÂ²)</label>
           <input type="number" id="areaAmbiente" min="0" step="0.01" value="0" placeholder="Ex: 25.5" oninput="recalcularTudo()">
         </div>
       </div>
@@ -124,7 +124,7 @@
         <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
           <div class="form-group">
           <div class="form-group">
-            <label for="tipoLuminaria">Tipo de Luminária</label>
+            <label for="tipoLuminaria">Tipo de LuminÃ¡ria</label>
             <input type="text" id="tipoLuminaria" list="listaTipos" placeholder="Selecione ou digite a categoria..." required>
             <datalist id="listaTipos">
               <option value="Perfis">
@@ -135,8 +135,8 @@
               <option value="Arandelas e Balizadores">
               <option value="Spots e Projetores">
               <option value="Embutidos">
-              <option value="Painéis e Plafons">
-              <option value="Acessórios e Diversos">
+              <option value="PainÃ©is e Plafons">
+              <option value="AcessÃ³rios e Diversos">
             </datalist>
           </div>
           <div class="form-group">
@@ -147,7 +147,7 @@
           </div>
           <div class="form-group">
             <label for="corLuminaria">Cor / Detalhe</label>
-            <input type="text" id="corLuminaria" placeholder="Ex: Preto, Branco, 3000K">
+            <input type="text" id="corLuminaria" list="listaCores" placeholder="Ex: Preto, Branco, 3000K"><datalist id="listaCores"><option value="Branco"></option><option value="Preto"></option><option value="Alumínio"></option><option value="3000K"></option><option value="4000K"></option></datalist>
           </div>
         </div>
         
@@ -187,32 +187,32 @@
           <option value="Copa"></option>
           <option value="Cozinha"></option>
           <option value="Apoio"></option>
-          <option value="Área Serviço"></option>
+          <option value="Ãrea ServiÃ§o"></option>
           <option value="Lavanderia"></option>
-          <option value="Depósito"></option>
-          <option value="Circulação"></option>
-          <option value="Circulação Externa"></option>
-          <option value="Circulação Interna"></option>
+          <option value="DepÃ³sito"></option>
+          <option value="CirculaÃ§Ã£o"></option>
+          <option value="CirculaÃ§Ã£o Externa"></option>
+          <option value="CirculaÃ§Ã£o Interna"></option>
           <option value="Suite 01"></option>
-          <option value="Suíte 02"></option>
-          <option value="Suíte 03"></option>
-          <option value="Suíte 04"></option>
-          <option value="Suíte 05"></option>
-          <option value="Suíte 06"></option>
-          <option value="Dormitório 01"></option>
-          <option value="Dormitório 02"></option>
-          <option value="Dormitório 03"></option>
-          <option value="Dormitório 04"></option>
-          <option value="Dormitório 05"></option>
+          <option value="SuÃ­te 02"></option>
+          <option value="SuÃ­te 03"></option>
+          <option value="SuÃ­te 04"></option>
+          <option value="SuÃ­te 05"></option>
+          <option value="SuÃ­te 06"></option>
+          <option value="DormitÃ³rio 01"></option>
+          <option value="DormitÃ³rio 02"></option>
+          <option value="DormitÃ³rio 03"></option>
+          <option value="DormitÃ³rio 04"></option>
+          <option value="DormitÃ³rio 05"></option>
           <option value="Quarto Funcionarios"></option>
-          <option value="Suíte Frente"></option>
-          <option value="Suíte Fundos"></option>
-          <option value="Banho Suíte 01"></option>
-          <option value="Banho Suíte 02"></option>
-          <option value="Banho Suíte 03"></option>
-          <option value="Banho Suíte 04"></option>
-          <option value="Banho Suíte 05"></option>
-          <option value="Banho Suíte 06"></option>
+          <option value="SuÃ­te Frente"></option>
+          <option value="SuÃ­te Fundos"></option>
+          <option value="Banho SuÃ­te 01"></option>
+          <option value="Banho SuÃ­te 02"></option>
+          <option value="Banho SuÃ­te 03"></option>
+          <option value="Banho SuÃ­te 04"></option>
+          <option value="Banho SuÃ­te 05"></option>
+          <option value="Banho SuÃ­te 06"></option>
           <option value="Banho Dorm. 01"></option>
           <option value="Banho Dorm. 02"></option>
           <option value="Banho Dorm. 03"></option>
@@ -230,10 +230,10 @@
           <option value="Despensa"></option>
           <option value="Piscina"></option>
           <option value="Churrasqueira"></option>
-          <option value="Área Lazer"></option>
+          <option value="Ãrea Lazer"></option>
           <option value="Varanda"></option>
           <option value="Gourmet"></option>
-          <option value="Escritório"></option>
+          <option value="EscritÃ³rio"></option>
           <option value="Paisagismo"></option>
         </datalist>
 
@@ -248,7 +248,7 @@
           <option value="Painel"></option>
           <option value="Nicho"></option>
           <option value="Bancada"></option>
-          <option value="Rodapé"></option>
+          <option value="RodapÃ©"></option>
           <option value="Marcenaria"></option>
           <option value="Marcenaria Superior"></option>
           <option value="Teto"></option>
@@ -272,14 +272,14 @@
     <section class="card table-card">
       <h2 class="card-title">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
-        Itens do Orçamento
+        Itens do OrÃ§amento
       </h2>
       <div class="table-wrapper">
         <table class="budget-table">
           <thead>
             <tr>
               <th>#</th>
-              <th>Localização</th>
+              <th>LocalizaÃ§Ã£o</th>
               <th>Produto</th>
               <th>Qtd</th>
               <th class="col-custo">Custo Unit.</th>
@@ -291,7 +291,7 @@
           <tbody id="tabelaItens">
             <tr class="empty-state-row"><td colspan="7" class="empty-state">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.3;margin-bottom:8px"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>
-              <span>Nenhum item adicionado ao orçamento</span>
+              <span>Nenhum item adicionado ao orÃ§amento</span>
             </td></tr>
           </tbody>
         </table>
@@ -312,8 +312,8 @@
         <div class="summary-row sub-row"><span class="summary-label">IPI (<span id="ipiLabel">5</span>%)</span><span id="valorIpi" class="summary-value">R$ 0,00</span></div>
         <div class="summary-row sub-row"><span class="summary-label">PIS (<span id="pisLabel">1,65</span>%)</span><span id="valorPis" class="summary-value">R$ 0,00</span></div>
         <div class="summary-row sub-row"><span class="summary-label">COFINS (<span id="cofinsLabel">7,6</span>%)</span><span id="valorCofins" class="summary-value">R$ 0,00</span></div>
-        <div class="summary-row sub-row"><span class="summary-label">Frete Fábrica</span><span id="valorFreteFabrica" class="summary-value">R$ 0,00</span></div>
-        <div class="summary-row sub-row"><span class="summary-label">M.O. Projetista por m²</span><span id="valorMO" class="summary-value">R$ 0,00</span></div>
+        <div class="summary-row sub-row"><span class="summary-label">Frete FÃ¡brica</span><span id="valorFreteFabrica" class="summary-value">R$ 0,00</span></div>
+        <div class="summary-row sub-row"><span class="summary-label">M.O. Projetista por mÂ²</span><span id="valorMO" class="summary-value">R$ 0,00</span></div>
         <div class="summary-row highlight-row"><span class="summary-label">TOTAL PRODUTOS COM IMPOSTOS</span><span id="totalProdutosImpostos" class="summary-value">R$ 0,00</span></div>
 
         <!-- OUTROS CUSTOS E MARGEM -->
@@ -328,14 +328,14 @@
 
         <!-- VALOR DE VENDA -->
         <div class="summary-row total-row"><span class="summary-label">VALOR DE VENDA</span><span id="valorVenda" class="summary-total">R$ 0,00</span></div>
-        <div class="summary-row custo-m2-row" id="custoM2Row" style="display:none;"><span class="summary-label">Valor de Venda por m²</span><span id="custoM2" class="summary-custo-m2">R$ 0,00</span></div>
+        <div class="summary-row custo-m2-row" id="custoM2Row" style="display:none;"><span class="summary-label">Valor de Venda por mÂ²</span><span id="custoM2" class="summary-custo-m2">R$ 0,00</span></div>
       </div>
     </section>
 
     <div class="actions-bar" style="display: flex; gap: 16px; justify-content: flex-end; margin-top: 24px;">
       <button class="btn-outline" onclick="limparOrcamento()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-        Limpar Orçamento
+        Limpar OrÃ§amento
       </button>
       <button class="btn-outline" onclick="gerarPdfInterno()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
@@ -351,8 +351,8 @@
   <!-- ========== TAB: ADMIN ========== -->
   <main class="main-content tab-content" id="tabContentAdmin">
     <div class="page-header">
-      <h1 class="page-title">Gerenciar <span class="gold">Usuários</span></h1>
-      <p class="page-subtitle">Aprove, rejeite e defina permissões dos usuários da plataforma</p>
+      <h1 class="page-title">Gerenciar <span class="gold">UsuÃ¡rios</span></h1>
+      <p class="page-subtitle">Aprove, rejeite e defina permissÃµes dos usuÃ¡rios da plataforma</p>
     </div>
 
     <section class="card">
@@ -362,19 +362,19 @@
         <button class="filter-btn" data-filter="pendente" onclick="setFiltro('pendente')">Pendentes <span class="filter-count filter-count-pending" id="countPendentes">0</span></button>
         <button class="filter-btn" data-filter="aprovado" onclick="setFiltro('aprovado')">Aprovados <span class="filter-count filter-count-approved" id="countAprovados">0</span></button>
         <button class="filter-btn" data-filter="rejeitado" onclick="setFiltro('rejeitado')">Rejeitados <span class="filter-count filter-count-rejected" id="countRejeitados">0</span></button>
-        <button class="btn-outline" style="margin-left:auto;padding:8px 16px;font-size:0.82rem;" onclick="carregarUsuarios()">↻ Atualizar</button>
+        <button class="btn-outline" style="margin-left:auto;padding:8px 16px;font-size:0.82rem;" onclick="carregarUsuarios()">â†» Atualizar</button>
       </div>
 
-      <!-- Tabela de Usuários -->
+      <!-- Tabela de UsuÃ¡rios -->
       <div class="table-wrapper">
         <table class="budget-table admin-table">
           <thead>
             <tr>
-              <th>Usuário</th>
-              <th>Permissão</th>
+              <th>UsuÃ¡rio</th>
+              <th>PermissÃ£o</th>
               <th>Status</th>
               <th>Cadastro</th>
-              <th>Ações</th>
+              <th>AÃ§Ãµes</th>
             </tr>
           </thead>
           <tbody id="tabelaUsuarios">
