@@ -189,22 +189,29 @@ function formatBRL(valor) {
 
 // ---- Update Models Dropdown ----
 function atualizarModelos() {
-  const tipoSelect = document.getElementById('tipoLuminaria');
-  const modeloSelect = document.getElementById('modeloLuminaria');
-  const precoInput = document.getElementById('precoUnitario');
-  const tipo = tipoSelect.value;
+  const tipoInput = document.getElementById('tipoLuminaria');
+  const listaModelos = document.getElementById('listaModelos');
+  const tipo = tipoInput.value;
 
-  modeloSelect.innerHTML = '<option value="">Selecione o modelo...</option>';
-  if (precoInput) precoInput.value = \'\';
-
+  if (!listaModelos) return;
+  listaModelos.innerHTML = '';
+  
   if (tipo && CATALOGO[tipo]) {
-    modeloSelect.disabled = false;
     CATALOGO[tipo].forEach((item) => {
       const opt = document.createElement('option');
       opt.value = item.modelo;
-      opt.textContent = item.modelo;
-      modeloSelect.appendChild(opt);
+      listaModelos.appendChild(opt);
     });
+  } else if (!tipo) {
+    Object.keys(CATALOGO).forEach(cat => {
+      CATALOGO[cat].forEach((item) => {
+        const opt = document.createElement('option');
+        opt.value = item.modelo;
+        listaModelos.appendChild(opt);
+      });
+    });
+  }
+});
   } else {
     modeloSelect.disabled = true;
   }
@@ -520,3 +527,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Focus
   document.getElementById('tipoLuminaria').focus();
 });
+
+
+
+a t u a l i z a r M o d e l o s ( ) ;  
+ 

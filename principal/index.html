@@ -123,26 +123,27 @@
       <form id="calculatorForm" onsubmit="return false;">
         <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
           <div class="form-group">
+          <div class="form-group">
             <label for="tipoLuminaria">Tipo de Luminária</label>
-            <select id="tipoLuminaria" required>
-              <option value="">Selecione a categoria...</option>
-              <option value="Perfis">Perfis</option>
-              <option value="Fitas LED">Fitas LED</option>
-              <option value="Fontes e Controladores">Fontes e Controladores</option>
-              <option value="Embutidos de Solo">Embutidos de Solo</option>
-              <option value="Espetos">Espetos</option>
-              <option value="Arandelas e Balizadores">Arandelas e Balizadores</option>
-              <option value="Spots e Projetores">Spots e Projetores</option>
-              <option value="Embutidos">Embutidos</option>
-              <option value="Painéis e Plafons">Painéis e Plafons</option>
-              <option value="Acessórios e Diversos">Acessórios e Diversos</option>
-            </select>
+            <input type="text" id="tipoLuminaria" list="listaTipos" placeholder="Selecione ou digite a categoria..." required>
+            <datalist id="listaTipos">
+              <option value="Perfis">
+              <option value="Fitas LED">
+              <option value="Fontes e Controladores">
+              <option value="Embutidos de Solo">
+              <option value="Espetos">
+              <option value="Arandelas e Balizadores">
+              <option value="Spots e Projetores">
+              <option value="Embutidos">
+              <option value="Painéis e Plafons">
+              <option value="Acessórios e Diversos">
+            </datalist>
           </div>
           <div class="form-group">
             <label for="modeloLuminaria">Modelo</label>
-            <select id="modeloLuminaria" required disabled>
-              <option value="">Selecione o modelo...</option>
-            </select>
+            <input type="text" id="modeloLuminaria" list="listaModelos" placeholder="Selecione ou digite o modelo..." required>
+            <datalist id="listaModelos">
+            </datalist>
           </div>
           <div class="form-group">
             <label for="corLuminaria">Cor / Detalhe</label>
