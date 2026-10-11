@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -128,6 +128,10 @@
           </div>
           <div class="form-group">
             <label for="modeloLuminaria">PEÇA</label><select id="modeloLuminaria"><option value="">Selecione o modelo...</option></select>
+          </div>
+          <div class="form-group">
+            <label for="quantidadeRef">QUANTIDADE</label>
+            <input type="text" id="quantidadeRef" readonly disabled placeholder="Selecione a peça">
           </div>
           <div class="form-group">
             <label for="corLuminaria">Cor / Detalhe</label><select id="corLuminaria"><option value="">Selecione...</option><option value="Branco">Branco</option><option value="Preto">Preto</option><option value="Alumínio">Alumínio</option><option value="3000K">3000K</option><option value="4000K">4000K</option><option value="6000K">6000K</option><option value="Sem Cor">Sem Cor</option></select>
@@ -375,7 +379,7 @@
   <script src="../firebase-config.js"></script>
   <script src="../auth.js"></script>
   <script src="../admin.js"></script>
-  <script src="../calculadora.js?v=7024"></script>
+  <script src="../calculadora.js?v=7026"></script>
 
   <script>
     // Tab switching
