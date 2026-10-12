@@ -284,14 +284,10 @@ function adicionarItem() {
   if (!local) { localInput.focus(); return; }
   if (!quantidade || quantidade < 1) { quantidadeInput.focus(); return; }
 
-  let nomeFinal = produto.modelo;
-  if (cor) {
-    nomeFinal += ` - Cor/Opção: ${cor}`;
-  }
-
-  itensOrcamento.push({
+  const novoItem = {
     tipo,
-    modelo: nomeFinal,
+    modeloBase: produto.modelo,
+    cor,
     ambiente,
     local,
     acendimento,
@@ -300,7 +296,9 @@ function adicionarItem() {
     quantidade,
     precoUnitario: produto.preco,
     subtotal: produto.preco * quantidade,
-  });
+  };
+  novoItem.modelo = nomeItem(novoItem);
+  itensOrcamento.push(novoItem);
 
   // Reset form
   tipoSelect.value = '';
@@ -315,6 +313,80 @@ function adicionarItem() {
 
   renderizarTabela();
   recalcularTudo();
+}
+
+// ---- Edit Item (campos editáveis na tabela) ----
+function escAttr(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function nomeItem(item) {
+  return item.cor ? `${item.modeloBase} - Cor/Opção: ${item.cor}` : item.modeloBase;
+}
+
+// Opções do select de cor da tabela = as mesmas do formulário "Adicionar Item"
+function opcoesCor(corAtual) {
+  const sel = document.getElementById('corLuminaria');
+  const valores = (sel && sel.options && sel.options.length > 0)
+    ? Array.from(sel.options).map((o) => o.value)
+    : ['', 'Branco', 'Preto', 'Alumínio', 'CORTEM', 'Sem Cor'];
+  if (corAtual && !valores.includes(corAtual)) valores.push(corAtual);
+  return valores
+    .map((v) => `<option value="${escAttr(v)}"${v === (corAtual || '') ? ' selected' : ''}>${v ? escAttr(v) : '—'}</option>`)
+    .join('');
+}
+
+// Sugestões de acendimento = opções comuns (C1 a C10) + os já usados nos itens
+function atualizarListaAcendimentos() {
+  let dl = document.getElementById('listaAcendimentosItens');
+  if (!dl) {
+    dl = document.createElement('datalist');
+    dl.id = 'listaAcendimentosItens';
+    document.body.appendChild(dl);
+  }
+  const padrao = ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10'];
+  const usados = itensOrcamento.map((it) => it.acendimento).filter(Boolean);
+  const todos = Array.from(new Set([...padrao, ...usados]));
+  dl.innerHTML = todos.map((a) => `<option value="${escAttr(a)}"></option>`).join('');
+}
+
+function editarItem(index, campo, valor, el) {
+  const item = itensOrcamento[index];
+  if (!item) return;
+
+  if (campo === 'quantidade') {
+    const q = parseInt(valor, 10);
+    if (!q || q < 1) { if (el) el.value = item.quantidade; return; }
+    item.quantidade = q;
+    item.subtotal = item.precoUnitario * q;
+    recalcularTudo();
+    return;
+  }
+
+  if (campo === 'cor') {
+    item.cor = valor;
+    item.modelo = nomeItem(item);
+    if (el) el.setAttribute('data-empty', (!valor).toString());
+    return;
+  }
+
+  // ambiente, local e acendimento
+  const texto = String(valor).trim();
+  if ((campo === 'ambiente' || campo === 'local') && !texto) {
+    if (el) el.value = item[campo];
+    return;
+  }
+  item[campo] = texto;
+  if (el) {
+    el.value = texto;
+    el.size = Math.max(texto.length, 1);
+    if (campo === 'acendimento') el.setAttribute('data-empty', (!texto).toString());
+  }
+  if (campo === 'acendimento') atualizarListaAcendimentos();
 }
 
 // ---- Remove Item ----
@@ -339,20 +411,28 @@ function renderizarTabela() {
     return;
   }
 
+  atualizarListaAcendimentos();
+
   tabelaBody.innerHTML = itensOrcamento
     .map((item, i) => `
       <tr>
-        <td>${i + 1}</td>
+        <td style="text-align: center;">
+          <div style="font-weight: 600;">${i + 1}</div>
+          <input type="text" class="edit-field edit-acend" list="listaAcendimentosItens" value="${escAttr(item.acendimento)}" data-empty="${!item.acendimento}" size="${Math.max(String(item.acendimento || '').length, 1)}" placeholder="Acend." title="Acendimento" onchange="editarItem(${i}, 'acendimento', this.value, this)">
+        </td>
         <td>
-          <div style="font-weight: 500; margin-bottom: 2px;">${item.ambiente}</div>
-          <div style="font-size: 0.85em; color: #666;">${item.local} ${item.acendimento ? `(Acend: ${item.acendimento})` : ''}</div>
+          <div class="edit-stack">
+            <input type="text" class="edit-field edit-ambiente" list="listaAmbientes" value="${escAttr(item.ambiente)}" placeholder="Ambiente" title="Ambiente" onchange="editarItem(${i}, 'ambiente', this.value, this)">
+            <input type="text" class="edit-field edit-local" list="listaLocais" value="${escAttr(item.local)}" placeholder="Local" title="Local" onchange="editarItem(${i}, 'local', this.value, this)">
+          </div>
         </td>
         <td>
           <div style="font-weight: 500; margin-bottom: 2px;">${item.tipo}</div>
-          <div style="font-size: 0.85em; color: #666;">${item.modelo}</div>
-          ${item.quant ? `<div style="font-size: 0.8em; color: #888;">Quantidade: ${item.quant}</div>` : ''}
+          <div style="font-size: 0.85em; color: #666;">${item.modeloBase}</div>
+          <select class="edit-field edit-cor" data-empty="${!item.cor}" title="Cor / Detalhe" onchange="editarItem(${i}, 'cor', this.value, this)">${opcoesCor(item.cor)}</select>
+          ${item.quant ? `<div style="font-size: 0.8em; color: #888; margin-top: 3px;">Quantidade: ${item.quant}</div>` : ''}
         </td>
-        <td>${item.quantidade}</td>
+        <td style="text-align: center;"><input type="number" min="1" class="edit-field edit-qtd" value="${item.quantidade}" title="Quantidade" onchange="editarItem(${i}, 'quantidade', this.value, this)"></td>
         <td class="col-custo">${formatBRL(item.precoUnitario)}</td>
         <td class="col-venda highlight-text" style="color: var(--accent-gold); font-weight: 500;">—</td>
         <td class="col-total highlight-text" style="color: var(--accent-gold); font-weight: 700;">—</td>
@@ -539,6 +619,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('tipoLuminaria').addEventListener('change', atualizarModelos);
   document.getElementById('modeloLuminaria').addEventListener('change', atualizarPreco);
     atualizarModelos();
+  atualizarListaAcendimentos();
 
   // Initial calculation
   recalcularTudo();

@@ -443,6 +443,49 @@ body {
   transition: var(--transition);
 }
 
+/* ---- Campos editáveis da tabela de itens ---- */
+.budget-table .edit-field {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  background: #1a1a18;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 6px 8px;
+  outline: none;
+  transition: var(--transition);
+  box-sizing: border-box;
+  color-scheme: dark;
+}
+
+.budget-table .edit-field:focus {
+  border-color: var(--accent-gold);
+}
+
+.budget-table .edit-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+}
+
+.budget-table .edit-stack .edit-field { width: 100%; }
+.budget-table .edit-stack .edit-ambiente { font-weight: 500; }
+.budget-table .edit-stack .edit-local { font-size: 0.82rem; color: var(--text-muted); }
+.budget-table .edit-acend { width: 72px; margin-top: 6px; text-align: center; font-weight: 500; }
+.budget-table .edit-qtd { width: 64px; text-align: center; }
+.budget-table .edit-cor { margin-top: 6px; min-width: 110px; }
+
+/* Remover setas de incremento do input numérico */
+.budget-table input[type="number"]::-webkit-inner-spin-button,
+.budget-table input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.budget-table input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 .btn-remover:hover {
   background: rgba(255, 80, 80, 0.1);
   border-color: rgba(255, 80, 80, 0.4);
@@ -924,6 +967,29 @@ body {
 @media print {
   .actions { display: none !important; }
   .col-acoes { display: none !important; }
+  .budget-table .edit-field {
+    border: none !important;
+    padding: 0 !important;
+    margin-top: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: none !important;
+  }
+  .budget-table .edit-field::placeholder {
+    color: transparent !important;
+    opacity: 0 !important;
+  }
+  .budget-table .edit-field[data-empty="true"] {
+    display: none !important;
+  }
+  .budget-table .edit-stack .edit-local {
+    color: #666 !important;
+  }
   body.print-cliente .col-custo { display: none !important; }
   body.print-cliente .summary-breakdown { display: none !important; }
   body.print-cliente .summary-total { margin-top: 0; border-top: none; }
