@@ -491,6 +491,26 @@ body {
   border-color: rgba(255, 80, 80, 0.4);
 }
 
+/* ---- Termos e Condições do Orçamento ---- */
+.termos-card {
+  margin-top: 24px;
+}
+
+.termos-lista {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.termos-lista li {
+  padding-left: 4px;
+}
+
 /* ---- Header Tabs ---- */
 .header-tabs {
   display: flex;
@@ -993,6 +1013,31 @@ body {
   body.print-cliente .col-custo { display: none !important; }
   body.print-cliente .summary-breakdown { display: none !important; }
   body.print-cliente .summary-total { margin-top: 0; border-top: none; }
+
+  .termos-card {
+    border: 1px solid #ddd;
+    padding: 14px 18px;
+    margin-top: 16px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .termos-card .card-title {
+    font-size: 10.5pt;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #000 !important;
+  }
+  .termos-lista {
+    padding-left: 18px;
+    gap: 4px;
+    font-size: 8pt;
+    line-height: 1.4;
+    color: #333 !important;
+  }
+  .termos-lista li {
+    margin-bottom: 3px;
+    color: #333 !important;
+  }
 }
 
 .form-row .form-group { flex: 1 1 150px; }
